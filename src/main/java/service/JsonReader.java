@@ -3,6 +3,7 @@ package service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import domain.CarTracker;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,13 +13,14 @@ import java.util.List;
 
 public class JsonReader {
 
+    @Inject
     CarTrackerService carTrackerService;
     List<String> files = new ArrayList<>();
 
 
     public void readJsonFiles() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        CarTracker tracker = mapper.readValue(new File("E:\\Fontys\\ESD\\ESD6_RekeningRijden_NL\\DisplacementSystem\\test.json"), CarTracker.class);
+        CarTracker tracker = mapper.readValue(new File("D:\\Documents\\GitHub\\ESD6.RekeningRijden\\ESD6.NL.DisplacementSystem\\TestFiles\\test.json"), CarTracker.class);
         carTrackerService.runAllChecks(tracker);
     }
 
