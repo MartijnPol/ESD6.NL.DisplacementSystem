@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "processedCars.getNotProcessedDataById",
-                query = "SELECT p FROM ProcessedCars p WHERE p.processed = false AND p.id= :id")
+                query = "SELECT p FROM ProcessedCars p WHERE p.processed = false AND p.carTracker.id = :id")
 
 })
 public class ProcessedCars implements Serializable {
