@@ -1,9 +1,9 @@
 {
-  "trackerId": 17,
+  "id": 17,
   "totalRules": 10,
   "rules": [
     {
-      "ruleId": 1,
+      "id": 1,
       "kmDriven": 0,
       "date": 20012018151322,
       "lat": "52.09083",
@@ -11,7 +11,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 2,
+      "id": 2,
       "kmDriven": 0,
       "date": 20012018151322,
       "lat": "52.09083",
@@ -19,7 +19,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 3,
+      "id": 3,
       "kmDriven": 0,
       "date": 20012018151322,
       "lat": "52.09083",
@@ -27,7 +27,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 4,
+      "id": 4,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -35,7 +35,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 5,
+      "id": 5,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -43,7 +43,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 6,
+      "id": 6,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -51,7 +51,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 7,
+      "id": 7,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -59,7 +59,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 8,
+      "id": 8,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -67,7 +67,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 9,
+      "id": 9,
       "kmDriven": 86.2,
       "date": 20012018151322,
       "lat": "51.889401",
@@ -75,7 +75,7 @@
       "driven": "true"
     },
     {
-      "ruleId": 10,
+      "id": 10,
       "kmDriven": 172.4,
       "date": 20012018151322,
       "lat": "52.09083",
