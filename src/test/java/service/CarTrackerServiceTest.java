@@ -39,13 +39,11 @@ public class CarTrackerServiceTest {
     @Mock
     private CarTrackerDao carTrackerDao;
 
-    @Mock
-    private ProcessedCarsDao processedCarsDao;
-
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        carTrackerService = new CarTrackerService(carTrackerDao, processedCarsDao);
+        carTrackerService = new CarTrackerService();
+        carTrackerService.setCarTrackerDao(carTrackerDao);
 
         carTracker = new CarTracker();
         carTrackerRules = new ArrayList<>();
@@ -97,7 +95,7 @@ public class CarTrackerServiceTest {
     @Ignore
     @Test
     public void missingRuleValuesCheck_CarTracker_True(){
-        carTrackerRules.add(new CarTrackerRule(1L, carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules(1L);
         assertTrue(carTrackerService.missingRuleValuesCheck(carTracker));

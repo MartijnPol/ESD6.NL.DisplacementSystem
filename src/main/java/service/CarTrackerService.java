@@ -130,7 +130,7 @@ public class CarTrackerService {
      * @param carTracker is the CarTracker from which the CarTrackerRules are checked.
      * @returns true when the CarTrackerRules are valid, false if not.
      */
-    private boolean missingRuleValuesCheck(CarTracker carTracker) {
+    public boolean missingRuleValuesCheck(CarTracker carTracker) {
 
         long i = carTracker.getRules().get(0).getId();
         for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
@@ -207,4 +207,8 @@ public class CarTrackerService {
     }
     //</editor-fold>
 
+
+    public void setCarTrackerDao(CarTrackerDao carTrackerDao) {
+        this.carTrackerDao = carTrackerDao;
+    }
 }
