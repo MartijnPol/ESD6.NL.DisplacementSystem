@@ -29,6 +29,7 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
