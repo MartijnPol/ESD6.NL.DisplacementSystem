@@ -20,7 +20,7 @@ public class CarTrackerRuleTest {
 
     @Test
     public void createCarTrackerRule() {
-        carTrackerRules.add(new CarTrackerRule(1L, carTracker, 2L, new Date(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());

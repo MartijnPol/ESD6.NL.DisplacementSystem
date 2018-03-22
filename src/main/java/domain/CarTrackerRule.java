@@ -12,11 +12,17 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "carTrackerRule.getHighestRuleIdFromCarTrackerRules",
+                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker")
+})
 public class CarTrackerRule implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -40,8 +46,7 @@ public class CarTrackerRule implements Serializable {
     @JsonProperty
     private boolean driven;
 
-    public CarTrackerRule(Long ruleId, CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
-        this.id = ruleId;
+    public CarTrackerRule(CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
         this.carTracker = carTracker;
         this.kmDriven = kmDriven;
         this.date = date;
@@ -65,11 +70,12 @@ public class CarTrackerRule implements Serializable {
                 .build();
     }
 
-    public Long getRuleId() {
+    //<editor-fold desc="Getters/Setters">
+    public Long getId() {
         return id;
     }
 
-    public void setRuleId(Long ruleId) {
+    public void setId(Long ruleId) {
         this.id = ruleId;
     }
 
@@ -120,11 +126,21 @@ public class CarTrackerRule implements Serializable {
     public void setDriven(boolean driven) {
         this.driven = driven;
     }
+    //</editor-fold>
+
+    //<editor-fold desc="equals/hashCode">
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarTrackerRule that = (CarTrackerRule) o;
+        return Objects.equals(id, that.id);
+    }
 
     @Override
-    public String toString() {
-        return " \n Rule [ruleId=" + id + ", carTrackerId=" + carTracker.getId() + ", km driven=" + kmDriven
-                + ", date" + date + ", latitude=" + lat
-                + ", longitude=" + lon + ", driven=" + driven + "]";
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
+    //</editor-fold>
 }

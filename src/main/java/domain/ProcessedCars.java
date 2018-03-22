@@ -8,13 +8,14 @@ import java.util.Date;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "processedCars.getNotProcessedDataById", query = "SELECT p FROM ProcessedCars p WHERE p.processed = false AND p.id= :id")
+        @NamedQuery(name = "processedCars.getNotProcessedDataById",
+                query = "SELECT p FROM ProcessedCars p WHERE p.processed = false AND p.id= :id")
 
 })
 public class ProcessedCars implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)

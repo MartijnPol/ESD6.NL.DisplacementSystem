@@ -34,9 +34,9 @@ public class StartUp {
         CarTracker carTracker = new CarTracker();
 
         List<CarTrackerRule> carTrackerRules = new ArrayList<CarTrackerRule>();
-        carTrackerRules.add(new CarTrackerRule(1L, carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(2L, carTracker,3L, new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime(), 51.523677, 5.064195, true));
-        carTrackerRules.add(new CarTrackerRule(3L, carTracker, 3L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker,3L, new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime(), 51.523677, 5.064195, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 3L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
         carTracker.setRules(carTrackerRules);
 
         carTrackerService.create(carTracker);
