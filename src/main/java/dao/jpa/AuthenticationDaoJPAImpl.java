@@ -18,17 +18,9 @@ public class AuthenticationDaoJPAImpl extends GenericDaoJPAImpl<Credentials> imp
     }
 
     @Override
-    public Credentials findByUsername(String username) {
-        return getEntityManager().createNamedQuery("credentials.findByUsername", Credentials.class)
-                .setParameter("username", username)
-                .getSingleResult();
-    }
-
-    @Override
-    public Credentials findByUsernameAndPassword(String username, String password) {
-        return getEntityManager().createNamedQuery("credentials.findByUsernameAndPassword", Credentials.class)
-                .setParameter("username", username)
-                .setParameter("password", password)
+    public Credentials findByApplicationName(String applicationName) {
+        return getEntityManager().createNamedQuery("credentials.findByApplicationName", Credentials.class)
+                .setParameter("applicationName", applicationName)
                 .getSingleResult();
     }
 }

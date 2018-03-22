@@ -1,0 +1,24 @@
+GET http://localhost:8080/DisplacementSystem/api/carTrackers?Authorization=lenovo
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-22T034721.401.html
+
+###
+
+POST http://localhost:8080/DisplacementSystem/api/carTrackers?Authorization=lenovo
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-22T034640.405.html
+
+###
+
+GET http://localhost:8080/DisplacementSystem/api/carTrackers
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-22T034556.401.html
+
+###
+

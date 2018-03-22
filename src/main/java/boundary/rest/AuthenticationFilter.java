@@ -33,7 +33,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
 
-        if (!authenticationService.validateToken(token)) {
+        if (!authenticationService.tokenIsValid(token)) {
             abortWithUnauthorized(containerRequestContext);
             return;
         }

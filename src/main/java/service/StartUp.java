@@ -51,7 +51,7 @@ public class StartUp {
             e.printStackTrace();
         }*/
 
-        Credentials credentials = new Credentials("admin", "admin");
+        Credentials credentials = new Credentials("admin");
         credentials.setToken("lenovo");
         authenticationService.createCredentials(credentials);
     }

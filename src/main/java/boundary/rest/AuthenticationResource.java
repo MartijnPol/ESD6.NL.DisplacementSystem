@@ -23,16 +23,15 @@ public class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response authenticateUser(Credentials credentials) {
-        String username = credentials.getUsername();
-        String password = credentials.getPassword();
+        String applicationName = credentials.getApplicationName();
 
-        boolean authenticate = authenticationService.authenticate(username, password);
+        boolean authenticate = authenticationService.authenticate(applicationName);
 
         if(authenticate != true) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        String token = authenticationService.issueToken(username);
+        String token = authenticationService.issueToken(applicationName);
 
         return Response.ok(token).build();
     }

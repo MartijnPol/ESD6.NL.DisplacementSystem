@@ -1,13 +1,16 @@
 package domain;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @NamedQueries({
         @NamedQuery(name = "credentials.findByToken", query = "SELECT c FROM Credentials c WHERE c.token = :token"),
-        @NamedQuery(name = "credentials.findByUsername", query = "SELECT c FROM Credentials c WHERE c.username = :username"),
-        @NamedQuery(name = "credentials.findByUsernameAndPassword", query = "SELECT c FROM Credentials c WHERE c.username = :username AND c.password = :password")
+        @NamedQuery(name = "credentials.findByApplicationName", query = "SELECT c FROM Credentials c WHERE c.applicationName = :applicationName")
 })
 public class Credentials implements Serializable {
 
@@ -15,36 +18,32 @@ public class Credentials implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String password;
+    @Column(unique = true)
+    private String applicationName;
+
+    private Date expirationDate;
+
     private String token;
 
     public Credentials() {
+        this.expirationDate = DateUtils.addMonths(new Date(), 1);
     }
 
-    public Credentials(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public Credentials(String applicationName) {
+        this();
+        this.applicationName = applicationName;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getApplicationName() {
+        return applicationName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
     public String getToken() {
@@ -53,5 +52,13 @@ public class Credentials implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }
