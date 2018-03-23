@@ -95,7 +95,7 @@ public class CarTrackerServiceTest {
     @Ignore
     @Test
     public void missingRuleValuesCheck_CarTracker_True(){
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules(1L);
         assertTrue(carTrackerService.missingRuleValuesCheck(carTracker));
