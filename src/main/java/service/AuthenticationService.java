@@ -83,7 +83,7 @@ public class AuthenticationService {
             return false;
         }
 
-        if (!isDateExpired(foundCredentials.getExpirationDate())) {
+        if (isDateExpired(foundCredentials.getExpirationDate())) {
             return false;
         }
 
@@ -100,8 +100,8 @@ public class AuthenticationService {
      */
     public boolean isDateExpired(Date date) {
         Date now = new Date();
-
-        return now.compareTo(date) == -1;
+        int i = date.compareTo(now);
+        return i == -1;
     }
 
     /**
@@ -112,5 +112,9 @@ public class AuthenticationService {
      */
     public Credentials findByApplicationName(String applicationName) {
         return authenticationDao.findByApplicationName(applicationName);
+    }
+
+    public void setAuthenticationDao(AuthenticationDao authenticationDao) {
+        this.authenticationDao = authenticationDao;
     }
 }

@@ -40,7 +40,7 @@ public class CarTrackerServiceTest {
     private CarTrackerDao carTrackerDao;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         carTrackerService = new CarTrackerService();
         carTrackerService.setCarTrackerDao(carTrackerDao);
@@ -56,45 +56,45 @@ public class CarTrackerServiceTest {
     }
 
     @Test
-    public void create_NewCarTracker_CarTrackerCreated(){
+    public void create_NewCarTracker_CarTrackerCreated() {
         carTrackerService.create(carTracker);
         verify(carTrackerDao, Mockito.times(1)).create(carTracker);
     }
 
     @Test
-    public void findById_CarTrackerId_CarTrackerFound(){
+    public void findById_CarTrackerId_CarTrackerFound() {
         when(carTrackerService.findById(1L)).thenReturn(carTracker);
         CarTracker carTrackerFound = carTrackerService.findById(1L);
         assertThat(carTrackerFound, is(carTracker));
     }
 
     @Test
-    public void getCarTrackers_None_CarTrackerListFound(){
+    public void getCarTrackers_None_CarTrackerListFound() {
         carTrackerService.getCarTrackers();
         verify(carTrackerDao, Mockito.times(1)).findAll();
     }
 
     @Test
-    public void getRulesWithinPeriod_CarTrackerIdAndStartAndEndDate_CarTrackerRulesFoundWithinPeriod(){
+    public void getRulesWithinPeriod_CarTrackerIdAndStartAndEndDate_CarTrackerRulesFoundWithinPeriod() {
         when(carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo)).thenReturn(carTracker);
         CarTracker carTrackerFound = carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo);
         assertThat(carTrackerFound, is(carTracker));
     }
 
     @Test
-    public void getRulesWithinMultiplePeriods_CarTrackerDataQuery_CarTrackerListFound(){
+    public void getRulesWithinMultiplePeriods_CarTrackerDataQuery_CarTrackerListFound() {
         //when(carTrackerService.getRulesWithinMultiplePeriods(carTrackerDataQueries))
     }
 
     @Ignore
     @Test
-    public void runAllChecks_CarTracker_None(){
+    public void runAllChecks_CarTracker_None() {
         carTrackerService.runAllChecks(carTracker);
     }
 
     @Ignore
     @Test
-    public void missingRuleValuesCheck_CarTracker_True(){
+    public void missingRuleValuesCheck_CarTracker_True() {
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules(1L);
@@ -103,19 +103,19 @@ public class CarTrackerServiceTest {
 
     @Ignore
     @Test
-    public void sizeCheck_CarTracker_True(){
+    public void sizeCheck_CarTracker_True() {
 
     }
 
     @Ignore
     @Test
-    public void idCheck_CarTracker_True(){
+    public void idCheck_CarTracker_True() {
 
     }
 
     @Ignore
     @Test
-    public void storedDataCheck_CarTrackerData_True(){
+    public void storedDataCheck_CarTrackerData_True() {
 
     }
 }
