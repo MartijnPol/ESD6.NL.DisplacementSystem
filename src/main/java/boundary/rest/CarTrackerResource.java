@@ -20,7 +20,6 @@ public class CarTrackerResource {
     private CarTrackerService carTrackerService;
 
     public CarTrackerResource() {
-
     }
 
     /**
@@ -29,7 +28,6 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
-    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
@@ -40,10 +38,11 @@ public class CarTrackerResource {
     }
 
     /**
-     * Function to create a CarTracker object
+     * Function to create a CarTracker object.
+     * When the parameter carTracker is evaluated null a response status not found is thrown
      *
-     * @param carTracker
-     * @return
+     * @param carTracker CarTracker Json object
+     * @return URI containing the newly created CarTracker id
      */
     @POST
     @Path("/createCarTracker")
@@ -61,8 +60,10 @@ public class CarTrackerResource {
 
     /**
      * Function to get CarTrackerData according to a given TrackerId
+     * The database is searched for a cartracker that matches the provided id.
+     * When the search return empty a response status not found is thrown.
      *
-     * @param id trackerId
+     * @param id trackerId that represents an existing CarTracker
      * @return All data that belongs to the given TrackerId
      */
     @GET
