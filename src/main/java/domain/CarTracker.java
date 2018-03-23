@@ -72,7 +72,7 @@ public class CarTracker implements Serializable {
 
         return Json.createObjectBuilder()
                 .add("CarTrackerId", this.id)
-                .add("carTrackerRules", jsonArrayBuilder)
+                .add("CarTrackerRules", jsonArrayBuilder)
                 .build();
     }
 
