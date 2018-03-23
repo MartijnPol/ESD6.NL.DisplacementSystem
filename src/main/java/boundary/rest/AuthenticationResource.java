@@ -19,10 +19,19 @@ public class AuthenticationResource {
     @Inject
     AuthenticationService authenticationService;
 
+    /**
+     * Function for authenticating credentials.
+     * The database is searched for existing credentials that match the provided application name.
+     * When the search returns empty HTTP error 403 forbidden is thrown.
+     * In case that credentials were found a new token will be generated.
+     *
+     * @param credentials Credentials Json object
+     * @return Generated token
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response authenticateUser(Credentials credentials) {
+    public Response authenticateApplication(Credentials credentials) {
         String applicationName = credentials.getApplicationName();
 
         boolean authenticate = authenticationService.authenticate(applicationName);

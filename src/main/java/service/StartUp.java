@@ -44,11 +44,11 @@ public class StartUp {
         carTracker.setRules(carTrackerRules);
 
         carTrackerService.create(carTracker);
-        try {
+        /*try {
             jsonReader.readJsonFiles();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Credentials credentials = new Credentials("admin");
         credentials.setToken("lenovo");
