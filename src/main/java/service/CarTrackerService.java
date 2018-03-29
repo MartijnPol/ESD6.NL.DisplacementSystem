@@ -51,6 +51,15 @@ public class CarTrackerService {
     }
 
     /**
+     * Function to update a given CarTracker object in the database
+     *
+     * @param carTracker is the CarTracker object that needs to be updated
+     */
+    public void update(CarTracker carTracker) {
+        carTrackerDao.update(carTracker);
+    }
+
+    /**
      * Function to find CarTracker data by it's Id
      *
      * @param id is the given Id that belongs to a CarTracker data object
@@ -116,8 +125,13 @@ public class CarTrackerService {
             boolean valueCheck = this.missingRuleValuesCheck(carTracker);
 
             if (idCheck && sizeCheck && valueCheck && storedDataCheck) {
-                //TODO-Marc: Implement JMS and remove the CarTrackerQueue
-                this.carTrackerQueue.addQueue(carTracker);
+//                List<CarTrackerRule> carTrackerRules = new ArrayList<>();
+//                for (CarTrackerRule rule: carTracker.getRules()) {
+//                    carTrackerRules.add(rule);
+//                }
+//                carTracker.setRules(carTrackerRules);
+                this.update(carTracker);
+                processedCarsDao.create(new ProcessedCars(carTracker, new Date(), true));
             } else {
                 this.processedCarsDao.create(new ProcessedCars(carTracker, new Date(), false));
             }
@@ -205,8 +219,6 @@ public class CarTrackerService {
 
         return cars.isEmpty();
     }
-    //</editor-fold>
-
 
     public void setCarTrackerDao(CarTrackerDao carTrackerDao) {
         this.carTrackerDao = carTrackerDao;
