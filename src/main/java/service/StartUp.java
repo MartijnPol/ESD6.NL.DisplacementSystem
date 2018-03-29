@@ -3,6 +3,7 @@ package service;
 import domain.CarTracker;
 import domain.CarTrackerRule;
 import domain.Credentials;
+import jms.MessageProducer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -30,20 +31,31 @@ public class StartUp {
     @Inject
     private JsonReader jsonReader;
 
+    @Inject
+    private MessageProducer messageProducer;
+
     public StartUp() {
     }
 
     @PostConstruct
-    public void initData() {
+    public void initData(){
         CarTracker carTracker = new CarTracker();
 
         List<CarTrackerRule> carTrackerRules = new ArrayList<CarTrackerRule>();
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914, true));
         carTrackerRules.add(new CarTrackerRule(carTracker,3L, new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime(), 51.523677, 5.064195, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 3L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 4L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
         carTracker.setRules(carTrackerRules);
 
+        CarTracker test= null;
+        try {
+            test = jsonReader.readJsonFiles();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         carTrackerService.create(carTracker);
+
+        messageProducer.sentMessage(test);
         /*try {
             jsonReader.readJsonFiles();
         } catch (IOException e) {
