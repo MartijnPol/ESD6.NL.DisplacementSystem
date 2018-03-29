@@ -51,7 +51,7 @@ public class StartUp {
         }*/
 
         Credentials credentials = new Credentials("admin");
-        credentials.setToken("lenovo");
+        credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
         authenticationService.createCredentials(credentials);
     }
 }

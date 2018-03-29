@@ -9,6 +9,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class CarTrackerResourceTest {
 
+    private final String token = "q21jk1e0tf839ilbvl4q28lvp9";
+
     @BeforeClass
     public static void setUp() {
         Setup();
@@ -17,6 +19,7 @@ public class CarTrackerResourceTest {
     @Test
     public void carTrackers() {
         given().
+                auth().oauth2(token).
                 when().
                 get("CarTrackers").
                 then().
@@ -45,7 +48,7 @@ public class CarTrackerResourceTest {
                 statusCode(200).
                 body("CarTrackerId", equalTo(1),
                         "CarTrackerRules.size()", equalTo(3),
-                        "CarTrackerRules[0].id", equalTo(1),
+                        "CarTrackerRules[0].id", equalTo(2),
                         "CarTrackerRules[0].hasDriven", equalTo(true));
     }
 }
