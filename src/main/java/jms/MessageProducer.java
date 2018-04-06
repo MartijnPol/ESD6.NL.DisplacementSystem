@@ -27,7 +27,7 @@ public class MessageProducer {
     public MessageProducer() {
     }
     
-    public void sentMessage(CarTracker carTracker){
+    public void sendMessage(CarTracker carTracker){
             JMSContext context = cf.createContext();
             context.createProducer().send(queue, carTracker);
             context.close();

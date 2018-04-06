@@ -1,7 +1,7 @@
 package boundary.rest;
 
 import dao.CarTrackerRuleDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import domain.CarTracker;
 import domain.CarTrackerRule;
 import jms.MessageProducer;
@@ -34,7 +34,7 @@ public class JmsResource {
     private CarTrackerService carTrackerService;
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     private CarTrackerRuleDao carTrackerRuleDao;
 
 
@@ -42,7 +42,7 @@ public class JmsResource {
     @GET
     public String startJMS(@PathParam("id") Long id) {
         CarTracker carTracker = carTrackerService.findById(id);
-        messageProducer.sentMessage(carTracker);
+        messageProducer.sendMessage(carTracker);
 
         if (carTracker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -69,7 +69,7 @@ public class JmsResource {
             carTrackerRuleDao.create(rule);
         }
 
-        messageProducer.sentMessage(carTrackerTest);
+        messageProducer.sendMessage(carTrackerTest);
 
         return "Test cartracker ingevoerd";
     }
@@ -86,7 +86,7 @@ public class JmsResource {
         }
 
 
-        messageProducer.sentMessage(carTracker);
+        messageProducer.sendMessage(carTracker);
 
         return "Test cartracker json ingevoerd";
     }

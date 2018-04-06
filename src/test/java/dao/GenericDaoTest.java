@@ -49,20 +49,6 @@ public class GenericDaoTest {
         dateTwo = new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime();
     }
 
-    @After
-    public void after(){
-        tx.begin();
-        carTracker.getRules().remove(0);
-        carTrackerDao.update(carTracker);
-        tx.commit();
-
-        try {
-            new DatabaseCleaner(emf.createEntityManager()).clean();
-        } catch (SQLException ex) {
-            Logger.getLogger(CarTrackerDaoJPAImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     @Test
     public void create_ClassType_TypeCreated(){
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
@@ -114,7 +100,6 @@ public class GenericDaoTest {
         Assert.assertNotEquals(3, foundCarTrackers.get(0).getRules().size());
     }
 
-    @Ignore
     @Test
     public void deleteById_TypeLongId_TypeDeleted(){
         tx.begin();

@@ -2,7 +2,7 @@ package service;
 
 import dao.CarTrackerDao;
 import dao.CarTrackerRuleDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import dao.ProcessedCarsDao;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
@@ -21,15 +21,15 @@ import java.util.List;
 public class CarTrackerService {
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     public CarTrackerDao carTrackerDao;
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     public CarTrackerRuleDao carTrackerRuleDao;
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     public ProcessedCarsDao processedCarsDao;
 
     /**
@@ -130,7 +130,6 @@ public class CarTrackerService {
                 for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
                     carTrackerRule.setCarTracker(foundCarTracker);
                 }
-                foundCarTracker.addTotalRules(carTracker.getTotalRules());
 
                 this.update(foundCarTracker);
 

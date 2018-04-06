@@ -1,7 +1,7 @@
 package dao.jpa;
 
 import dao.CarTrackerRuleDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import domain.CarTracker;
 import domain.CarTrackerRule;
 
@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
  * @author Thom van de Pas on 22-3-2018
  */
 @Stateless
-@JPADisplacementSystem
+@JPA
 public class CarTrackerRuleJPAImpl extends GenericDaoJPAImpl<CarTrackerRule> implements CarTrackerRuleDao {
 
     @Override

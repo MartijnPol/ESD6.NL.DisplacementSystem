@@ -26,7 +26,6 @@ public class CarTrackerResource {
     @Inject
     private CarTrackerService carTrackerService;
 
-
     /**
      * Empty constructor
      */
@@ -40,6 +39,7 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
@@ -65,7 +65,31 @@ public class CarTrackerResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
+        carTracker.getRules().forEach(carTrackerRule -> carTrackerRule.setCarTracker(carTracker));
         carTrackerService.create(carTracker);
+
+        URI id = URI.create(carTracker.getId().toString());
+        return Response.created(id).build();
+    }
+
+    /**
+     * Function to update a CarTracker entity.
+     * When the parameter carTracker is evaluated null a response status not found is thrown (404).
+     *
+     * @param carTracker CarTracker Json object
+     * @return URI containing the newly created CarTracker id
+     */
+    @POST
+    @Path("/Update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCarTracker(CarTracker carTracker) {
+        if (carTracker == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        messageProducer.sendMessage(carTracker);
+
         URI id = URI.create(carTracker.getId().toString());
         return Response.created(id).build();
     }
@@ -111,7 +135,7 @@ public class CarTrackerResource {
      * When the search returns no elements a response status not found is thrown (404).
      *
      * @param carTrackerDataQueries the given CarTrackerDataQueries
-     * @return A JSON file containing a list of CarTrackerDataResponse objects
+     * @return A JSON file containing a list of objects
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -125,6 +149,4 @@ public class CarTrackerResource {
 
         return Response.ok(this.carTrackerService.replaceAllToJson(carTrackerList)).build();
     }
-
-
 }

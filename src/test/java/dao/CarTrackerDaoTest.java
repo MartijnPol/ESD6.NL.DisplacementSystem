@@ -74,12 +74,16 @@ public class CarTrackerDaoTest {
         tx.begin();
         carTrackerDao.update(carTracker);
         tx.commit();
+        CarTracker foundCarTrackers2 = carTrackerDao.getRulesWithinPeriod(carTracker.getId(), dateOne, dateFour);
 
-        Assert.assertEquals(1, carTracker.getRules().size());
-        Assert.assertEquals(carTracker, foundCarTrackers);
-        Assert.assertNotEquals(2, foundCarTrackers);
-        Assert.assertNotEquals(2, carTracker.getRules().size());
-        Assert.assertEquals(dateOne, carTracker.getRules().get(0).getDate());
+        Assert.assertNotEquals(2, foundCarTrackers2);
+        Assert.assertNotEquals(2, foundCarTrackers2.getRules().size());
+        Assert.assertEquals(dateOne, foundCarTrackers2.getRules().get(0).getDate());
+
+        tx.begin();
+        foundCarTrackers2.getRules().remove(0);
+        carTrackerDao.update(carTracker);
+        tx.commit();
     }
 
     @Test
