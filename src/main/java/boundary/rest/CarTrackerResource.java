@@ -1,10 +1,7 @@
 package boundary.rest;
 
-import dao.CarTrackerRuleDao;
-import dao.JPADisplacementSystem;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
-import domain.CarTrackerRule;
 import jms.MessageProducer;
 import service.CarTrackerService;
 
@@ -14,9 +11,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("CarTrackers")
@@ -25,6 +19,8 @@ public class CarTrackerResource {
 
     @Inject
     private CarTrackerService carTrackerService;
+    @Inject
+    private MessageProducer messageProducer;
 
     /**
      * Empty constructor
