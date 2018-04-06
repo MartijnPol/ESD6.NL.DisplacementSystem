@@ -85,8 +85,7 @@ public class CarTrackerResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        carTracker.getRules().forEach(carTrackerRule -> carTrackerRule.setCarTracker(carTracker));
-        carTrackerService.update(carTracker);
+        messageProducer.sendMessage(carTracker);
 
         URI id = URI.create(carTracker.getId().toString());
         return Response.created(id).build();

@@ -129,14 +129,14 @@ public class CarTrackerService {
                 List<CarTrackerRule> receivedRules = carTracker.getRules();
 
                 for (CarTrackerRule receivedRule : receivedRules) {
-                    receivedRule.setCarTracker(carTracker);
+                    receivedRule.setCarTracker(foundCarTracker);
                     carTrackerRuleDao.create(receivedRule);
                 }
 
                 foundCarTracker.addRules(receivedRules);
 
                 carTrackerDao.update(foundCarTracker);
-                processedCarsDao.create(new ProcessedCars(carTracker, new Date(), true));
+                processedCarsDao.create(new ProcessedCars(foundCarTracker, new Date(), true));
             } else {
                 this.processedCarsDao.create(new ProcessedCars(carTracker, new Date(), false));
             }
