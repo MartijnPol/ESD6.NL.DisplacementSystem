@@ -1,7 +1,7 @@
 package service;
 
 import dao.AuthenticationDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import domain.Credentials;
 
 import javax.ejb.Stateless;
@@ -15,7 +15,7 @@ import java.util.Random;
 public class AuthenticationService {
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     AuthenticationDao authenticationDao;
 
     /**

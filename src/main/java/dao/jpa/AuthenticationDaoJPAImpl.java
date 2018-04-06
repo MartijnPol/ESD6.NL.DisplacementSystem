@@ -1,13 +1,13 @@
 package dao.jpa;
 
 import dao.AuthenticationDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import domain.Credentials;
 
 import javax.ejb.Stateless;
 
 @Stateless
-@JPADisplacementSystem
+@JPA
 public class AuthenticationDaoJPAImpl extends GenericDaoJPAImpl<Credentials> implements AuthenticationDao {
 
     @Override

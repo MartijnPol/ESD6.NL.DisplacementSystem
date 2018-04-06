@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 @Path("jms")
 public class JmsResource {
-    
+
     @Inject
     public MessageProducer messageProducer;
 
@@ -25,7 +25,7 @@ public class JmsResource {
     @GET
     public String startJMS(@PathParam("id") Long id) {
         CarTracker carTracker = carTrackerService.findById(id);
-        messageProducer.sentMessage(carTracker);
+        messageProducer.sendMessage(carTracker);
 
         if (carTracker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
