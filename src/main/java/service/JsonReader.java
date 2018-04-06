@@ -22,7 +22,7 @@ public class JsonReader {
 
     public CarTracker readJsonFiles() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        CarTracker tracker = mapper.readValue(new File("E:\\Fontys\\ESD\\ESD6.NL.DisplacementSystem\\TestFiles\\test.json"), CarTracker.class);
+        CarTracker tracker = mapper.readValue(new File("C:\\Users\\Gebruiker\\Documents\\Development\\ESD6.NL.DisplacementSystem\\TestFiles\\test.json"), CarTracker.class);
         System.out.println(tracker.toString());
         return tracker;
     }

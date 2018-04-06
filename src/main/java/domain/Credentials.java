@@ -4,7 +4,6 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity

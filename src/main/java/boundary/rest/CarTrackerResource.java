@@ -2,6 +2,7 @@ package boundary.rest;
 
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
+import jms.MessageProducer;
 import service.CarTrackerService;
 
 import javax.ejb.Stateless;
@@ -18,6 +19,9 @@ public class CarTrackerResource {
 
     @Inject
     private CarTrackerService carTrackerService;
+
+    @Inject
+    MessageProducer messageProducer;
 
     /**
      * Empty constructor
@@ -58,7 +62,32 @@ public class CarTrackerResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
+        carTracker.getRules().forEach(carTrackerRule -> carTrackerRule.setCarTracker(carTracker));
         carTrackerService.create(carTracker);
+
+        URI id = URI.create(carTracker.getId().toString());
+        return Response.created(id).build();
+    }
+
+    /**
+     * Function to update a CarTracker entity.
+     * When the parameter carTracker is evaluated null a response status not found is thrown (404).
+     *
+     * @param carTracker CarTracker Json object
+     * @return URI containing the newly created CarTracker id
+     */
+    @POST
+    @Path("/Update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCarTracker(CarTracker carTracker) {
+        if (carTracker == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        carTracker.getRules().forEach(carTrackerRule -> carTrackerRule.setCarTracker(carTracker));
+        carTrackerService.update(carTracker);
+
         URI id = URI.create(carTracker.getId().toString());
         return Response.created(id).build();
     }
@@ -104,7 +133,7 @@ public class CarTrackerResource {
      * When the search returns no elements a response status not found is thrown (404).
      *
      * @param carTrackerDataQueries the given CarTrackerDataQueries
-     * @return A JSON file containing a list of CarTrackerDataResponse objects
+     * @return A JSON file containing a list of objects
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

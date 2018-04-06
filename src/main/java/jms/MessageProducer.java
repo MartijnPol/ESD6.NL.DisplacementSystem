@@ -25,10 +25,10 @@ public class MessageProducer {
 
     public MessageProducer() {
     }
-    
-    public void sentMessage(CarTracker carTracker){
-            JMSContext context = cf.createContext();
-            context.createProducer().send(queue, carTracker);
-            context.close();
+
+    public void sentMessage(CarTracker carTracker) {
+        JMSContext context = cf.createContext();
+        context.createProducer().send(queue, carTracker);
+        context.close();
     }
 }

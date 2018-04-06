@@ -125,12 +125,17 @@ public class CarTrackerService {
             boolean valueCheck = this.missingRuleValuesCheck(carTracker);
 
             if (idCheck && sizeCheck && valueCheck && storedDataCheck) {
-//                List<CarTrackerRule> carTrackerRules = new ArrayList<>();
-//                for (CarTrackerRule rule: carTracker.getRules()) {
-//                    carTrackerRules.add(rule);
-//                }
-//                carTracker.setRules(carTrackerRules);
-                this.update(carTracker);
+                CarTracker foundCarTracker = carTrackerDao.findById(carTracker.getId());
+                List<CarTrackerRule> receivedRules = carTracker.getRules();
+
+                for (CarTrackerRule receivedRule : receivedRules) {
+                    receivedRule.setCarTracker(carTracker);
+                    carTrackerRuleDao.create(receivedRule);
+                }
+
+                foundCarTracker.addRules(receivedRules);
+
+                carTrackerDao.update(foundCarTracker);
                 processedCarsDao.create(new ProcessedCars(carTracker, new Date(), true));
             } else {
                 this.processedCarsDao.create(new ProcessedCars(carTracker, new Date(), false));

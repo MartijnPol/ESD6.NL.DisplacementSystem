@@ -1,9 +1,6 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.*;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -25,26 +22,23 @@ public class CarTrackerRule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private CarTracker carTracker;
 
-    @JsonProperty
     private Long kmDriven;
 
-    @JsonProperty
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date date;
 
-    @JsonProperty
     private double lat;
 
-    @JsonProperty
     private double lon;
 
-    @JsonProperty
     private boolean driven;
+
+    public CarTrackerRule() {
+    }
 
     public CarTrackerRule(CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
         this.carTracker = carTracker;
@@ -55,11 +49,8 @@ public class CarTrackerRule implements Serializable {
         this.driven = driven;
     }
 
-    public CarTrackerRule() {
-    }
-
     public JsonObject toJson() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)

@@ -1,32 +1,27 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@XmlRootElement
 @NamedQuery(name = "carTracker.findAllMovementsWithinPeriodByTrackerId", query = "SELECT cr FROM CarTrackerRule cr " +
         "WHERE cr.date BETWEEN :startDate AND :endDate AND cr.carTracker.id = :trackerId")
 public class CarTracker implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
     private Long id;
 
-    @JsonProperty
     private Long totalRules;
 
-    @JsonProperty
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CarTrackerRule> rules;
 
     public CarTracker() {
@@ -61,6 +56,16 @@ public class CarTracker implements Serializable {
 
     public void setRules(List<CarTrackerRule> rules) {
         this.rules = rules;
+        calculateTotalRules();
+    }
+
+    public void addRules(List<CarTrackerRule> rules) {
+        this.rules.addAll(rules);
+        calculateTotalRules();
+    }
+
+    public void calculateTotalRules() {
+        this.totalRules = (long) rules.size();
     }
 
     public JsonObject toJson() {
