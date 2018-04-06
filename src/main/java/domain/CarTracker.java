@@ -55,12 +55,21 @@ public class CarTracker implements Serializable {
         this.totalRules = totalRules;
     }
 
+    public void addTotalRules(Long totalRules){
+        this.totalRules = this.totalRules + totalRules;
+    }
+
     public List<CarTrackerRule> getRules() {
         return rules;
     }
 
     public void setRules(List<CarTrackerRule> rules) {
         this.rules = rules;
+    }
+
+    public void addRules (List<CarTrackerRule> rules)
+    {
+        this.rules.addAll(rules);
     }
 
     public JsonObject toJson() {
@@ -72,6 +81,7 @@ public class CarTracker implements Serializable {
 
         return Json.createObjectBuilder()
                 .add("CarTrackerId", this.id)
+                .add("totalRules", this.totalRules)
                 .add("CarTrackerRules", jsonArrayBuilder)
                 .build();
     }

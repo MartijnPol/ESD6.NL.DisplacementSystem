@@ -32,9 +32,6 @@ public class CarTrackerService {
     @JPADisplacementSystem
     public ProcessedCarsDao processedCarsDao;
 
-    @Inject
-    public CarTrackerQueue carTrackerQueue;
-
     /**
      * Empty constructor
      */
@@ -55,8 +52,9 @@ public class CarTrackerService {
      *
      * @param carTracker is the CarTracker object that needs to be updated
      */
-    public void update(CarTracker carTracker) {
-        carTrackerDao.update(carTracker);
+    public CarTracker update(CarTracker carTracker) {
+        System.out.println("TEST-Update" + " " + carTracker.toString());
+        return this.carTrackerDao.update(carTracker);
     }
 
     /**
@@ -123,17 +121,22 @@ public class CarTrackerService {
             boolean idCheck = this.idCheck(carTracker);
             boolean sizeCheck = this.sizeCheck(carTracker);
             boolean valueCheck = this.missingRuleValuesCheck(carTracker);
+            CarTracker foundCarTracker = this.findById(carTracker.getId());
+
+            System.out.println("runchecks");
 
             if (idCheck && sizeCheck && valueCheck && storedDataCheck) {
-//                List<CarTrackerRule> carTrackerRules = new ArrayList<>();
-//                for (CarTrackerRule rule: carTracker.getRules()) {
-//                    carTrackerRules.add(rule);
-//                }
-//                carTracker.setRules(carTrackerRules);
-                this.update(carTracker);
-                processedCarsDao.create(new ProcessedCars(carTracker, new Date(), true));
+                foundCarTracker.addRules(carTracker.getRules());
+                for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
+                    carTrackerRule.setCarTracker(foundCarTracker);
+                }
+                foundCarTracker.addTotalRules(carTracker.getTotalRules());
+
+                this.update(foundCarTracker);
+
+                this.processedCarsDao.create(new ProcessedCars(foundCarTracker, new Date(), true));
             } else {
-                this.processedCarsDao.create(new ProcessedCars(carTracker, new Date(), false));
+                this.processedCarsDao.create(new ProcessedCars(foundCarTracker, new Date(), false));
             }
         }
     }

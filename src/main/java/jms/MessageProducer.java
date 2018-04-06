@@ -8,13 +8,14 @@ package jms;
 import domain.CarTracker;
 
 import javax.annotation.Resource;
+import javax.ejb.Singleton;
 import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 
-
-@Stateful
+@Stateless
 public class MessageProducer {
 
     @Resource(mappedName = "jms/GlassFishQueue")

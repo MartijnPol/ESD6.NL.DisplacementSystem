@@ -1,5 +1,7 @@
 package service;
 
+import dao.CarTrackerDao;
+import dao.CarTrackerRuleDao;
 import domain.CarTracker;
 import domain.CarTrackerRule;
 import domain.Credentials;
@@ -35,10 +37,12 @@ public class StartUp {
     private MessageProducer messageProducer;
 
     public StartUp() {
+
     }
 
     @PostConstruct
     public void initData(){
+
         CarTracker carTracker = new CarTracker();
 
         List<CarTrackerRule> carTrackerRules = new ArrayList<CarTrackerRule>();
@@ -47,23 +51,27 @@ public class StartUp {
         carTrackerRules.add(new CarTrackerRule(carTracker, 4L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
         carTracker.setRules(carTrackerRules);
 
-        CarTracker test= null;
-        try {
-            test = jsonReader.readJsonFiles();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        for (CarTrackerRule rule: carTrackerRules)
+//        {
+//            rule.setCarTracker(carTracker);
+//        }
+        carTracker.setTotalRules((long) carTrackerRules.size());
         carTrackerService.create(carTracker);
 
-        messageProducer.sentMessage(test);
-        /*try {
-            jsonReader.readJsonFiles();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+//        try {
+//            messageProducer.sentMessage(jsonReader.readJsonFiles());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        Credentials credentials = new Credentials("admin");
-        credentials.setToken("lenovo");
-        authenticationService.createCredentials(credentials);
+//        try {
+//            jsonReader.readJsonFiles();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        Credentials credentials = new Credentials("admin");
+//        credentials.setToken("lenovo");
+//        authenticationService.createCredentials(credentials);
     }
 }
