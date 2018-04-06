@@ -1,7 +1,7 @@
 package dao.jpa;
 
 import dao.GenericDao;
-import dao.JPADisplacementSystem;
+import dao.JPA;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 @Stateless
-@JPADisplacementSystem
+@JPA
 public abstract class GenericDaoJPAImpl<T> implements GenericDao<T> {
 
     @PersistenceContext(unitName = "CarTackerPU")

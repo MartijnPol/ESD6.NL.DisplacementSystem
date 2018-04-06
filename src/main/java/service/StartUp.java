@@ -48,14 +48,14 @@ public class StartUp {
         carTracker.setRules(carTrackerRules);
         carTrackerService.create(carTracker);
 
-        /*CarTracker receivedCarTracker = null;
+        CarTracker receivedCarTracker = null;
         try {
-            receivedCarTracker = jsonReader.readJsonFiles();
+            test = jsonReader.readJsonFiles();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        messageProducer.sentMessage(receivedCarTracker);*/
+        messageProducer.sentMessage(receivedCarTracker);
 
         Credentials credentials = new Credentials("admin");
         credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
