@@ -11,4 +11,8 @@ public class PingResource {
 	public String getPing(){
 		return "DisplacementSystem OK";
 	}
+
+	@GET
+	@Path("/v2")
+	public String getAdvancedPing(){return "pong";}
 }
