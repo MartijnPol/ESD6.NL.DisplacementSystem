@@ -11,5 +11,4 @@ public class PingResource {
 	public String getPing(){
 		return "DisplacementSystem";
 	}
-
 }
