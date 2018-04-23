@@ -9,10 +9,7 @@ public class PingResource {
 
 	@GET
 	public String getPing(){
-		return "DisplacementSystem OK";
+		return "DisplacementSystem";
 	}
 
-	@GET
-	@Path("/v2")
-	public String getAdvancedPing(){return "pong";}
 }
