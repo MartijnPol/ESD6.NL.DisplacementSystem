@@ -42,8 +42,8 @@ public class CarTrackerService {
      *
      * @param carTracker is the CarTracker object that needs to be saved
      */
-    public void create(CarTracker carTracker) {
-        carTrackerDao.create(carTracker);
+    public CarTracker create(CarTracker carTracker) {
+        return this.carTrackerDao.create(carTracker);
     }
 
     /**
@@ -182,7 +182,7 @@ public class CarTrackerService {
      * @param carTracker the CarTracker which gets its Rules size checked.
      * @return true if the size of the Rules is equal to the expectedRuleSize. False if not.
      */
-    private boolean sizeCheck(CarTracker carTracker) {
+    public boolean sizeCheck(CarTracker carTracker) {
         return carTracker.getRules().size() == carTracker.getTotalRules();
     }
 
@@ -193,7 +193,7 @@ public class CarTrackerService {
      * @param carTracker the CarTracker which gets is CarTrackerRule id's checked and validated.
      * @return true if they match. False if they don't match.
      */
-    private boolean idCheck(CarTracker carTracker) {
+    public boolean idCheck(CarTracker carTracker) {
         Long highestKnownRuleId = this.carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker);
 
         CarTrackerRule foundCarTrackerRule = carTracker.getRules().get(0);
@@ -211,7 +211,7 @@ public class CarTrackerService {
      * @param carTrackerId is the id of the CarTracker that needs its processedCars checked.
      * @return true if there are no unprocessed cars.
      */
-    private boolean storedDataCheck(Long carTrackerId) {
+    public boolean storedDataCheck(Long carTrackerId) {
         return this.processedCarsDao.getNotProcessedDataById(carTrackerId).isEmpty();
     }
     //</editor-fold>
