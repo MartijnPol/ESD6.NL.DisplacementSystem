@@ -36,7 +36,7 @@ public class AuthenticationResource {
 
         boolean authenticate = authenticationService.authenticate(applicationName);
 
-        if (authenticate != true) {
+        if (!authenticate) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
