@@ -2,9 +2,10 @@ package dao;
 
 import dao.jpa.CarTrackerDaoJPAImpl;
 import domain.CarTracker;
-import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import util.DatabaseCleaner;
 
 import javax.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class GenericDaoTest {
     private Date dateTwo;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         try {
             new DatabaseCleaner(emf.createEntityManager()).clean();
         } catch (SQLException ex) {
@@ -50,7 +51,7 @@ public class GenericDaoTest {
     }
 
     @Test
-    public void create_ClassType_TypeCreated(){
+    public void create_ClassType_TypeCreated() {
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
 
@@ -70,7 +71,7 @@ public class GenericDaoTest {
     }
 
     @Test
-    public void update_ClassType_TypeUpdated(){
+    public void update_ClassType_TypeUpdated() {
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
 
@@ -101,7 +102,7 @@ public class GenericDaoTest {
     }
 
     @Test
-    public void deleteById_TypeLongId_TypeDeleted(){
+    public void deleteById_TypeLongId_TypeDeleted() {
         tx.begin();
         carTrackerDao.create(carTracker);
         tx.commit();
@@ -122,7 +123,7 @@ public class GenericDaoTest {
     }
 
     @Test
-    public void delete_Type_TypeDeleted(){
+    public void delete_Type_TypeDeleted() {
         tx.begin();
         carTrackerDao.create(carTracker);
         tx.commit();
@@ -144,7 +145,7 @@ public class GenericDaoTest {
 
 
     @Test
-    public void findById_TypeLongId_TypeFound(){
+    public void findById_TypeLongId_TypeFound() {
         tx.begin();
         carTrackerDao.create(carTracker);
         tx.commit();
@@ -155,7 +156,7 @@ public class GenericDaoTest {
     }
 
     @Test
-    public void findAll_None_ListOfTypeFound(){
+    public void findAll_None_ListOfTypeFound() {
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
 

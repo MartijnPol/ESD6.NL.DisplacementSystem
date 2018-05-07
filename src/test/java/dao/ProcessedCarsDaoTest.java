@@ -31,7 +31,7 @@ public class ProcessedCarsDaoTest {
     private Date dateOne;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         try {
             new DatabaseCleaner(emf.createEntityManager()).clean();
         } catch (SQLException ex) {
@@ -50,7 +50,7 @@ public class ProcessedCarsDaoTest {
     }
 
     @Test
-    public void getNotProcessedDataById_Id_ListOfNotProcessedCars(){
+    public void getNotProcessedDataById_Id_ListOfNotProcessedCars() {
         carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
         carTracker.setRules(carTrackerRules);
 

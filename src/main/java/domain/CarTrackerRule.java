@@ -1,6 +1,7 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -54,7 +55,7 @@ public class CarTrackerRule implements Serializable {
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("kmDriven" , this.kmDriven)
+                .add("kmDriven", this.kmDriven)
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)

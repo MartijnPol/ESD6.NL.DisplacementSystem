@@ -10,7 +10,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import util.DatabaseCleaner;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -19,8 +18,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 public class CarTrackerDaoTest {
 
@@ -39,7 +36,7 @@ public class CarTrackerDaoTest {
     private Date dateFour;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         try {
             new DatabaseCleaner(emf.createEntityManager()).clean();
         } catch (SQLException ex) {
@@ -61,7 +58,7 @@ public class CarTrackerDaoTest {
     }
 
     @Test
-    public void getRulesWithinPeriod_CarTrackerIDStartDateEndDate_CarTrackerFound(){
+    public void getRulesWithinPeriod_CarTrackerIDStartDateEndDate_CarTrackerFound() {
         tx.begin();
         carTrackerDao.create(carTracker);
         CarTracker foundCarTrackers = carTrackerDao.getRulesWithinPeriod(carTracker.getId(), dateOne, dateFour);
@@ -87,7 +84,7 @@ public class CarTrackerDaoTest {
     }
 
     @Test
-    public void getRulesWithinMultiplePeriods_CarTrackerDataQueryList_ListOfCarTrackersFound(){
+    public void getRulesWithinMultiplePeriods_CarTrackerDataQueryList_ListOfCarTrackersFound() {
         tx.begin();
         carTrackerDao.create(carTracker);
         List<CarTracker> foundCarTrackers = carTrackerDao.findAll();
@@ -113,7 +110,7 @@ public class CarTrackerDaoTest {
 
     @Ignore
     @Test
-    public void getLastRuleId_None_GetLastRuleId(){
+    public void getLastRuleId_None_GetLastRuleId() {
 
     }
 }

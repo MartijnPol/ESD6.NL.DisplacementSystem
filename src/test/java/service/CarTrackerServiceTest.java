@@ -1,7 +1,6 @@
 package service;
 
 import dao.CarTrackerDao;
-import dao.ProcessedCarsDao;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
@@ -16,8 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.*;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

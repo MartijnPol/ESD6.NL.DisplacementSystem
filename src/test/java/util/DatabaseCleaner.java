@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DatabaseCleaner {
     private static final Class<?>[] ENTITY_TYPES = {
-        CarTracker.class, CarTrackerRule.class
+            CarTracker.class, CarTrackerRule.class
     };
 
     private final EntityManager em;

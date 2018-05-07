@@ -13,8 +13,8 @@ import java.util.Date;
 })
 
 /**
- * Created by Martijn van der Pol on 13-03-18
- **/
+ * @author Martijn van der Pol on 13-03-18
+ */
 public class CarTrackerDataQuery {
 
     @JsonProperty("identificationNumber")

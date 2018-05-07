@@ -1,7 +1,5 @@
 package service;
 
-import dao.CarTrackerDao;
-import dao.CarTrackerRuleDao;
 import domain.CarTracker;
 import domain.CarTrackerRule;
 import domain.Credentials;
@@ -11,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

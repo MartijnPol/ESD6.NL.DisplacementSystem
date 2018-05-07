@@ -3,7 +3,6 @@ package service;
 import dao.AuthenticationDao;
 import domain.Credentials;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

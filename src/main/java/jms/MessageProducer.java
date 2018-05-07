@@ -8,8 +8,6 @@ package jms;
 import domain.CarTracker;
 
 import javax.annotation.Resource;
-import javax.ejb.Singleton;
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
@@ -26,10 +24,10 @@ public class MessageProducer {
 
     public MessageProducer() {
     }
-    
-    public void sendMessage(CarTracker carTracker){
-            JMSContext context = cf.createContext();
-            context.createProducer().send(queue, carTracker);
-            context.close();
+
+    public void sendMessage(CarTracker carTracker) {
+        JMSContext context = cf.createContext();
+        context.createProducer().send(queue, carTracker);
+        context.close();
     }
 }

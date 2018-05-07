@@ -5,8 +5,6 @@ import domain.CarTracker;
 import domain.CarTrackerRule;
 
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
