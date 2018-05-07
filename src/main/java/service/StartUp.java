@@ -47,18 +47,18 @@ public class StartUp {
 //        carTrackerRules.add(new CarTrackerRule(carTracker, 4L, new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime(), 51.523677, 5.064195, true));
 //        carTracker.setRules(carTrackerRules);
 //
-//        for (CarTrackerRule rule: carTrackerRules)
-//        {
-//            rule.setCarTracker(carTracker);
-//        }
+////        for (CarTrackerRule rule: carTrackerRules)
+////        {
+////            rule.setCarTracker(carTracker);
+////        }
 //        carTracker.setTotalRules((long) carTrackerRules.size());
 //        carTrackerService.create(carTracker);
 //
-//        try {
-//            messageProducer.sendMessage(jsonReader.readJsonFiles());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+////        try {
+////            messageProducer.sendMessage(jsonReader.readJsonFiles());
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
 //
 //        Credentials credentials = new Credentials("admin");
 //        credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
