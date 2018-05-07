@@ -21,8 +21,7 @@ pipeline{
         }
         stage('Test sonarqube'){
             steps{
-                sh 'mvn sonar:sonar -Dsonar.host.url=http://192.168.25.121:9000 -Dsonar.login=33d2bf0931e4ba870789a1cf8e6276a20de55fe1'
-
+                sh 'mvn sonar:sonar -Dsonar.host.url=http://192.168.25.126:9000 -Dsonar.login=74881713522900d0ec5dc5a0ad9e303480b307a8'
             }
         }
     }
