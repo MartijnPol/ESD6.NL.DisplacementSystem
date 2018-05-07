@@ -21,9 +21,9 @@ import javax.jms.ObjectMessage;
 public class MessageBean implements MessageListener {
 
     @Inject
-    CarTrackerService cartrackerService;
+    private CarTrackerService cartrackerService;
 
-    int i = 0;
+    private int i = 0;
 
     public MessageBean() {
     }
@@ -31,12 +31,12 @@ public class MessageBean implements MessageListener {
     @Override
     public void onMessage(Message message) {
         ObjectMessage msg = (ObjectMessage) message;
-        CarTracker carTracker = null;
+        CarTracker carTracker;
         try {
             carTracker = (CarTracker) msg.getObject();
-            i++;
+            this.i++;
             System.out.println(i + " " + "TEST" + " " + carTracker.toString());
-            cartrackerService.runAllChecks(carTracker);
+            this.cartrackerService.runAllChecks(carTracker);
         } catch (JMSException e) {
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ import java.util.List;
 @JPA
 public class CarTrackerDaoJPAImpl extends GenericDaoJPAImpl<CarTracker> implements CarTrackerDao {
 
+    @SuppressWarnings("unchecked")
     @Override
     public CarTracker getRulesWithinPeriod(Long trackerId, Date startDate, Date endDate) {
         List rules = this.entityManager.createNamedQuery("carTracker.findAllMovementsWithinPeriodByTrackerId")
@@ -36,10 +37,4 @@ public class CarTrackerDaoJPAImpl extends GenericDaoJPAImpl<CarTracker> implemen
         }
         return carTrackerList;
     }
-
-    @Override
-    public long getLastRuleId() {
-        throw new NotImplementedException();
-    }
-
 }

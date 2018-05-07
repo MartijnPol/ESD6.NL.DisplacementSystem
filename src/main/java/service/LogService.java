@@ -17,7 +17,7 @@ public class LogService {
     public void logOverloadRequestError(String message) {
         Sentry.init();
 
-        sentryClient = SentryClientFactory.sentryClient();
+        this.sentryClient = SentryClientFactory.sentryClient();
         Sentry.capture(message);
     }
 }

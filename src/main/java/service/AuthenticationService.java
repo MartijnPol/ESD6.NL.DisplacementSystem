@@ -40,30 +40,24 @@ public class AuthenticationService {
      * @return True when credentials are found, otherwise false
      */
     public boolean authenticate(String applicationName) {
-        Credentials foundCredentials = findByApplicationName(applicationName);
-
-        if (foundCredentials == null) {
-            return false;
-        }
-
-        return true;
+        return this.findByApplicationName(applicationName) != null;
     }
 
     /**
      * Issue a random token.
      * Right after the token is generated, the credentials that belong the the provided application name are updated.
      *
-     * @param applicationName
-     * @return
+     * @param applicationName is the name of the Application that issues a Token
+     * @return the token
      */
     public String issueToken(String applicationName) {
         Random random = new SecureRandom();
         String token = new BigInteger(130, random).toString(32);
 
-        Credentials foundCredentials = findByApplicationName(applicationName);
+        Credentials foundCredentials = this.findByApplicationName(applicationName);
         foundCredentials.setToken(token);
 
-        authenticationDao.update(foundCredentials);
+        this.authenticationDao.update(foundCredentials);
 
         return token;
     }
@@ -77,17 +71,9 @@ public class AuthenticationService {
      * @return True if token is valid, otherwise false
      */
     public boolean tokenIsValid(String token) {
-        Credentials foundCredentials = authenticationDao.findByToken(token);
+        Credentials foundCredentials = this.authenticationDao.findByToken(token);
 
-        if (foundCredentials == null) {
-            return false;
-        }
-
-        if (isDateExpired(foundCredentials.getExpirationDate())) {
-            return false;
-        }
-
-        return true;
+        return foundCredentials != null && !this.isDateExpired(foundCredentials.getExpirationDate());
     }
 
     /**
@@ -100,8 +86,7 @@ public class AuthenticationService {
      */
     public boolean isDateExpired(Date date) {
         Date now = new Date();
-        int i = date.compareTo(now);
-        return i == -1;
+        return date.compareTo(now) < 0;
     }
 
     /**
@@ -114,6 +99,11 @@ public class AuthenticationService {
         return authenticationDao.findByApplicationName(applicationName);
     }
 
+    /**
+     * Sets the AuthenticationDao of the AuthenticationService.
+     *
+     * @param authenticationDao
+     */
     public void setAuthenticationDao(AuthenticationDao authenticationDao) {
         this.authenticationDao = authenticationDao;
     }

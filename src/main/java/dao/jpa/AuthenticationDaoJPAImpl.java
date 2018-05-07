@@ -5,6 +5,7 @@ import dao.JPA;
 import domain.Credentials;
 
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 @Stateless
 @JPA
@@ -12,15 +13,17 @@ public class AuthenticationDaoJPAImpl extends GenericDaoJPAImpl<Credentials> imp
 
     @Override
     public Credentials findByToken(String token) {
-        return getEntityManager().createNamedQuery("credentials.findByToken", Credentials.class)
-                .setParameter("token", token)
-                .getSingleResult();
+        TypedQuery<Credentials> query = getEntityManager().createNamedQuery("credentials.findByToken", Credentials.class)
+                .setParameter("token", token);
+
+        return oneResult(query);
     }
 
     @Override
     public Credentials findByApplicationName(String applicationName) {
-        return getEntityManager().createNamedQuery("credentials.findByApplicationName", Credentials.class)
-                .setParameter("applicationName", applicationName)
-                .getSingleResult();
+        TypedQuery<Credentials> query = getEntityManager().createNamedQuery("credentials.findByApplicationName", Credentials.class)
+                .setParameter("applicationName", applicationName);
+
+        return oneResult(query);
     }
 }

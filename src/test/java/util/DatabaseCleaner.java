@@ -2,6 +2,8 @@ package util;
 
 import domain.CarTracker;
 import domain.CarTrackerRule;
+import domain.Credentials;
+import domain.ProcessedCar;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
@@ -9,7 +11,7 @@ import java.sql.SQLException;
 
 public class DatabaseCleaner {
     private static final Class<?>[] ENTITY_TYPES = {
-            CarTracker.class, CarTrackerRule.class
+            CarTrackerRule.class, CarTracker.class, ProcessedCar.class
     };
 
     private final EntityManager em;
