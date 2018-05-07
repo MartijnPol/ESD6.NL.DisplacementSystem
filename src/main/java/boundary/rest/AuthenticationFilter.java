@@ -40,11 +40,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private boolean isTokenBasedAuthentication(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ")) {
-            return true;
-        } else {
-            return false;
-        }
+        return authorizationHeader != null && authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
     }
 
     private void abortWithUnauthorized(ContainerRequestContext containerRequestContext) {

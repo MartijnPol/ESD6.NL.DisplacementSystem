@@ -15,6 +15,7 @@ import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Stateless
 public class CarTrackerService {
@@ -151,12 +152,12 @@ public class CarTrackerService {
                         + carTrackerRule.getId() + " " + "isn't equal with count");
                 return false;
             }
-            if (carTrackerRule.getKmDriven() == null) {
+            if (Objects.isNull(carTrackerRule.getKmDriven())) {
                 System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
                         + carTrackerRule.getId() + " " + "has null at KmDriven");
                 return false;
             }
-            if (carTrackerRule.getDate() == null) {
+            if (Objects.isNull(carTrackerRule.getDate())) {
                 System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
                         + carTrackerRule.getId() + " " + "has null at Date");
                 return false;

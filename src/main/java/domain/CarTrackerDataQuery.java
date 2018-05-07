@@ -12,9 +12,6 @@ import java.util.Date;
         "endDate"
 })
 
-/**
- * @author Martijn van der Pol on 13-03-18
- */
 public class CarTrackerDataQuery {
 
     @JsonProperty("identificationNumber")

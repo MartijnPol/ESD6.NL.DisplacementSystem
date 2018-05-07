@@ -29,8 +29,8 @@ public class AuthenticationService {
      *
      * @param credentials The CarTracker object that needs to be saved
      */
-    public void createCredentials(Credentials credentials) {
-        authenticationDao.create(credentials);
+    public Credentials createCredentials(Credentials credentials) {
+        return this.authenticationDao.create(credentials);
     }
 
     /**
@@ -96,13 +96,13 @@ public class AuthenticationService {
      * @return Credentials object that was found
      */
     public Credentials findByApplicationName(String applicationName) {
-        return authenticationDao.findByApplicationName(applicationName);
+        return this.authenticationDao.findByApplicationName(applicationName);
     }
 
     /**
      * Sets the AuthenticationDao of the AuthenticationService.
      *
-     * @param authenticationDao
+     * @param authenticationDao is the AuthenticationDao to be set as the Dao.
      */
     public void setAuthenticationDao(AuthenticationDao authenticationDao) {
         this.authenticationDao = authenticationDao;
