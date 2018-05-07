@@ -68,6 +68,7 @@ public class CarTrackerResource {
         return Response.created(id).build();
     }
 
+    //TODO-Thom: Look for another solution for this (this is double).
     /**
      * Function to update a CarTracker entity.
      * When the parameter carTracker is evaluated null a response status not found is thrown (404).
