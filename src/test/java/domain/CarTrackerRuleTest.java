@@ -15,7 +15,7 @@ public class CarTrackerRuleTest {
     @Before
     public void setUp() {
         carTracker = new CarTracker();
-        carTrackerRules = new ArrayList<CarTrackerRule>();
+        carTrackerRules = new ArrayList<>();
     }
 
     @Test

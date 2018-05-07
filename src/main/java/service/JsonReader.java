@@ -29,16 +29,13 @@ public class JsonReader {
     public CarTracker updateCarTracker(CarTracker newCarTracker) {
         CarTracker foundCarTracker = carTrackerService.findById(newCarTracker.getId());
 
-        List<CarTrackerRule> carTrackerRulesTest = new ArrayList<>();
-        for (CarTrackerRule rule : newCarTracker.getRules()) {
-            carTrackerRulesTest.add(rule);
-        }
+        List<CarTrackerRule> carTrackerRulesTest = new ArrayList<>(newCarTracker.getRules());
 
         for (CarTrackerRule rule : newCarTracker.getRules()) {
             foundCarTracker.getRules().add(rule);
         }
 
-        foundCarTracker.setTotalRules(foundCarTracker.getTotalRules() + new Long(carTrackerRulesTest.size()));
+        foundCarTracker.setTotalRules(foundCarTracker.getTotalRules() + (long) carTrackerRulesTest.size());
 //        carTrackerTest.setTotalRules(carTracker.getTotalRules()+ new Long(carTrackerRulesTest.size()));
 
         return carTrackerService.update(foundCarTracker);

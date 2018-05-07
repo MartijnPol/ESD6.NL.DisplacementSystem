@@ -16,10 +16,8 @@ public class CarTrackerRuleJPAImpl extends GenericDaoJPAImpl<CarTrackerRule> imp
 
     @Override
     public Long getHighestRuleIdFromCarTrackerRules(CarTracker carTracker) {
-        Long carTrackerRuleId = getEntityManager().createNamedQuery("carTrackerRule.getHighestRuleIdFromCarTrackerRules", Long.class)
+        return getEntityManager().createNamedQuery("carTrackerRule.getHighestRuleIdFromCarTrackerRules", Long.class)
                 .setParameter("carTracker", carTracker)
                 .getSingleResult();
-
-        return carTrackerRuleId;
     }
 }

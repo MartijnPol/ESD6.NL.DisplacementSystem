@@ -1,19 +1,11 @@
 package service;
 
-import domain.CarTracker;
-import domain.CarTrackerRule;
-import domain.Credentials;
 import jms.MessageProducer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 @Singleton
 @Startup

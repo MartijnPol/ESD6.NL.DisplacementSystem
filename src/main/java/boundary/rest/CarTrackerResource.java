@@ -92,7 +92,7 @@ public class CarTrackerResource {
 
     /**
      * Function to get CarTrackerData according to a given TrackerId
-     * The database is searched for a cartracker that matches the provided id.
+     * The database is searched for a CarTracker that matches the provided id.
      * When the search return empty a response status not found is thrown (404).
      *
      * @param id trackerId that represents an existing CarTracker

@@ -57,7 +57,7 @@ public class JmsResource {
         long id = 1;
         CarTracker carTrackerTest = carTrackerService.findById(id);
         System.out.println(carTrackerTest.toString());
-        List<CarTrackerRule> carTrackerRulesTest = new ArrayList<CarTrackerRule>();
+        List<CarTrackerRule> carTrackerRulesTest = new ArrayList<>();
         carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 5L, new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime(), 55.560596, 6.091914, true));
         carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 6L, new GregorianCalendar(2018, Calendar.FEBRUARY, 2).getTime(), 53.523677, 7.064195, true));
         carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 8L, new GregorianCalendar(2018, Calendar.OCTOBER, 3).getTime(), 52.523677, 8.064195, true));

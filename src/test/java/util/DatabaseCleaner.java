@@ -2,7 +2,6 @@ package util;
 
 import domain.CarTracker;
 import domain.CarTrackerRule;
-import domain.Credentials;
 import domain.ProcessedCar;
 
 import javax.persistence.EntityManager;

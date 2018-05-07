@@ -4,7 +4,6 @@ import dao.CarTrackerDao;
 import dao.JPA;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
