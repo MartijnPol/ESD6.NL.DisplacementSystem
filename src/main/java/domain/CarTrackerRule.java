@@ -1,9 +1,6 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.*;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -12,36 +9,38 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "carTrackerRule.getHighestRuleIdFromCarTrackerRules",
+                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker")
+})
 public class CarTrackerRule implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private CarTracker carTracker;
 
-    @JsonProperty
     private Long kmDriven;
 
-    @JsonProperty
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy@HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date date;
 
-    @JsonProperty
     private double lat;
 
-    @JsonProperty
     private double lon;
 
-    @JsonProperty
     private boolean driven;
 
-    public CarTrackerRule(Long ruleId, CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
-        this.id = ruleId;
+    public CarTrackerRule() {
+    }
+
+    public CarTrackerRule(CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
         this.carTracker = carTracker;
         this.kmDriven = kmDriven;
         this.date = date;
@@ -50,26 +49,25 @@ public class CarTrackerRule implements Serializable {
         this.driven = driven;
     }
 
-    public CarTrackerRule() {
-    }
-
     public JsonObject toJson() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
+                .add("kmDriven" , this.kmDriven)
                 .add("date", date)
-                .add("latitude", this.lat)
-                .add("longitude", this.lon)
-                .add("hasDriven", driven)
+                .add("lat", this.lat)
+                .add("lon", this.lon)
+                .add("driven", driven)
                 .build();
     }
 
-    public Long getRuleId() {
+    //<editor-fold desc="Getters/Setters">
+    public Long getId() {
         return id;
     }
 
-    public void setRuleId(Long ruleId) {
+    public void setId(Long ruleId) {
         this.id = ruleId;
     }
 
@@ -120,11 +118,21 @@ public class CarTrackerRule implements Serializable {
     public void setDriven(boolean driven) {
         this.driven = driven;
     }
+    //</editor-fold>
+
+    //<editor-fold desc="equals/hashCode">
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarTrackerRule that = (CarTrackerRule) o;
+        return Objects.equals(id, that.id);
+    }
 
     @Override
-    public String toString() {
-        return " \n Rule [ruleId=" + id + ", carTrackerId=" + carTracker.getId() + ", km driven=" + kmDriven
-                + ", date" + date + ", latitude=" + lat
-                + ", longitude=" + lon + ", driven=" + driven + "]";
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
+    //</editor-fold>
 }

@@ -1,6 +1,6 @@
 package dao.jpa;
 
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import dao.ProcessedCarsDao;
 import domain.ProcessedCars;
 
@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-@JPADisplacementSystem
+@JPA
 public class ProcessedCarsDaoJPAImpl extends GenericDaoJPAImpl<ProcessedCars> implements ProcessedCarsDao {
 
     @Override
