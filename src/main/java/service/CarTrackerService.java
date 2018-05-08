@@ -110,31 +110,52 @@ public class CarTrackerService {
 
     //<editor-fold desc="All the CarTracker checks">
 
+
     /**
-     * Function to check if a given CarTrackerData object is 'safe'
+     * Method to update a CarTracker after the checks are run.
+     * First the CarTracker is searched in the DataBase and if
      *
-     * @param carTracker is the given carTrackerData object that needs to be checked
+     * @param carTracker is the CarTracker that will be updated.
      */
-    public void runAllChecks(CarTracker carTracker) {
+    public void processCarTracker(CarTracker carTracker) {
         if (carTracker != null) {
+
+            System.out.println("Processing CarTracker" + carTracker.getId());
             CarTracker foundCarTracker = this.findById(carTracker.getId());
 
-            System.out.println("Running checks");
+            boolean safe = this.runAllCarTrackerChecks(carTracker);
 
-            if (this.idCheck(carTracker) && this.sizeCheck(carTracker)
-                    && this.missingRuleValuesCheck(carTracker) && this.storedDataCheck(carTracker.getId())) {
-                foundCarTracker.addRules(carTracker.getRules());
-                for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
-                    carTrackerRule.setCarTracker(foundCarTracker);
+            if (safe) {
+                if (foundCarTracker != null) {
+                    foundCarTracker.addRules(carTracker.getRules());
+                    for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
+                        carTrackerRule.setCarTracker(foundCarTracker);
+                    }
+
+                    this.update(foundCarTracker);
+
+                    this.processedCarsDao.create(new ProcessedCar(foundCarTracker, new Date(), true));
+                } else {
+                    System.out.println("No CarTracker found with id: " + carTracker.getId());
                 }
-
-                this.update(foundCarTracker);
-
-                this.processedCarsDao.create(new ProcessedCar(foundCarTracker, new Date(), true));
             } else {
                 this.processedCarsDao.create(new ProcessedCar(foundCarTracker, new Date(), false));
             }
         }
+    }
+
+    /**
+     * Function to run all the checks for the given CarTracker.
+     * The function checks whether the CarTracker is 'safe'.
+     *
+     * @param carTracker is the given carTrackerData object that needs to be checked
+     */
+    public boolean runAllCarTrackerChecks(CarTracker carTracker) {
+        System.out.println("Running checks");
+
+        return this.idCheck(carTracker) && this.sizeCheck(carTracker)
+                && this.missingRuleValuesCheck(carTracker) && this.storedDataCheck(carTracker.getId());
+
     }
 
     /**

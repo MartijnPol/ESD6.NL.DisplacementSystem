@@ -36,7 +36,7 @@ public class MessageBean implements MessageListener {
             carTracker = (CarTracker) msg.getObject();
             this.i++;
             System.out.println(i + " " + "TEST" + " " + carTracker.toString());
-            this.cartrackerService.runAllChecks(carTracker);
+            this.cartrackerService.processCarTracker(carTracker);
         } catch (JMSException e) {
             e.printStackTrace();
         }

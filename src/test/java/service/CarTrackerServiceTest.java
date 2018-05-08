@@ -102,7 +102,7 @@ public class CarTrackerServiceTest {
         this.carTracker.addRules(Arrays.asList(carTrackerRule1, carTrackerRule2, carTrackerRule3));
         this.carTrackerService.create(this.carTracker);
         verify(carTrackerDao, Mockito.times(1)).create(carTracker);
-        this.carTrackerServiceMock.runAllChecks(this.carTracker);
+        this.carTrackerServiceMock.runAllCarTrackerChecks(this.carTracker);
     }
 
     @Test
