@@ -33,6 +33,7 @@ public class Credentials implements Serializable {
         this.applicationName = applicationName;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public Long getId() {
         return id;
     }
@@ -60,4 +61,5 @@ public class Credentials implements Serializable {
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
+    //</editor-fold>
 }

@@ -123,7 +123,7 @@ public class CarTrackerService {
             System.out.println("Processing CarTracker" + carTracker.getId());
             CarTracker foundCarTracker = this.findById(carTracker.getId());
 
-            boolean safe = this.runAllCarTrackerChecks(carTracker);
+            boolean safe = this.executeAllCarTrackerChecks(carTracker);
 
             if (safe) {
                 if (foundCarTracker != null) {
@@ -150,7 +150,7 @@ public class CarTrackerService {
      *
      * @param carTracker is the given carTrackerData object that needs to be checked
      */
-    public boolean runAllCarTrackerChecks(CarTracker carTracker) {
+    public boolean executeAllCarTrackerChecks(CarTracker carTracker) {
         System.out.println("Running checks");
 
         return this.idCheck(carTracker) && this.sizeCheck(carTracker)

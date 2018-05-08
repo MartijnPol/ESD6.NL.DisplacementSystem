@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 public class AuthenticationResource {
 
     @Inject
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
 
     /**
      * Function for authenticating credentials.

@@ -36,6 +36,11 @@ public class ProcessedCar implements Serializable {
         this.processed = processed;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
+    public Long getId() {
+        return id;
+    }
+
     public CarTracker getCarTracker() {
         return carTracker;
     }
@@ -59,4 +64,5 @@ public class ProcessedCar implements Serializable {
     public void setProcessed(boolean processed) {
         this.processed = processed;
     }
+    //</editor-fold>
 }

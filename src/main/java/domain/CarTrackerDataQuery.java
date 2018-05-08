@@ -28,6 +28,7 @@ public class CarTrackerDataQuery {
     public CarTrackerDataQuery() {
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     @JsonProperty("identificationNumber")
     public Long getIdentificationNumber() {
         return identificationNumber;
@@ -57,4 +58,5 @@ public class CarTrackerDataQuery {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    //</editor-fold>
 }

@@ -16,8 +16,9 @@ import java.io.IOException;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
+
     @Inject
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
 
     private static final String REALM = "example";
     private static final String AUTHENTICATION_SCHEME = "Bearer";

@@ -28,7 +28,7 @@ public class JmsResource {
     private JsonReader jsonReader;
 
     @Inject
-    public MessageProducer messageProducer;
+    private MessageProducer messageProducer;
 
     @Inject
     private CarTrackerService carTrackerService;
