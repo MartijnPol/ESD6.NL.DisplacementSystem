@@ -34,15 +34,16 @@ public class AuthenticationDaoTest {
         this.accountAdministrationSystemCredentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
         this.driverSystemCredentials = new Credentials("DriverSystem");
         this.driverSystemCredentials.setToken("d0rqi49b81635t6m1icpf7hrmf");
-    }
 
-    @Test
-    public void findCredentialsByTokenTest() {
         this.authenticationDao.create(this.accountAdministrationSystemCredentials);
         this.authenticationDao.create(this.driverSystemCredentials);
         verify(this.authenticationDao, Mockito.times(1)).create(accountAdministrationSystemCredentials);
         verify(this.authenticationDao, Mockito.times(1)).create(driverSystemCredentials);
 
+    }
+
+    @Test
+    public void findCredentialsByTokenTest() {
         when(this.authenticationDao.findByToken("fmrh7fpci1m6t53618b94iqr0d"))
                 .thenReturn(accountAdministrationSystemCredentials);
         Credentials foundCredentials = this.authenticationDao.findByToken("fmrh7fpci1m6t53618b94iqr0d");
@@ -56,5 +57,18 @@ public class AuthenticationDaoTest {
         assertNotSame(accountAdministrationSystemCredentials, foundCredentials);
     }
 
+    @Test
+    public void findByApplicationNameTest() {
+        when(this.authenticationDao.findByApplicationName("AccountAdministrationSystem"))
+                .thenReturn(accountAdministrationSystemCredentials);
+        Credentials foundCredentials = this.authenticationDao.findByApplicationName("AccountAdministrationSystem");
+        assertSame(accountAdministrationSystemCredentials, foundCredentials);
+        assertNotSame(driverSystemCredentials, foundCredentials);
 
+        when(this.authenticationDao.findByApplicationName("DriverSystem"))
+                .thenReturn(driverSystemCredentials);
+        foundCredentials = this.authenticationDao.findByApplicationName("DriverSystem");
+        assertSame(driverSystemCredentials, foundCredentials);
+        assertNotSame(accountAdministrationSystemCredentials, foundCredentials);
+    }
 }
