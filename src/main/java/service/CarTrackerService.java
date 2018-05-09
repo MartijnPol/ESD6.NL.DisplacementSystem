@@ -1,12 +1,13 @@
 package service;
 
 import dao.CarTrackerDao;
-import dao.JPADisplacementSystem;
+import dao.CarTrackerRuleDao;
+import dao.JPA;
 import dao.ProcessedCarsDao;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
-import domain.ProcessedCars;
+import domain.ProcessedCar;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,20 +15,22 @@ import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Stateless
 public class CarTrackerService {
 
     @Inject
-    @JPADisplacementSystem
+    @JPA
     public CarTrackerDao carTrackerDao;
 
     @Inject
-    @JPADisplacementSystem
-    public ProcessedCarsDao processedCarsDao;
+    @JPA
+    public CarTrackerRuleDao carTrackerRuleDao;
 
     @Inject
-    public CarTrackerQueue carTrackerQueue;
+    @JPA
+    public ProcessedCarsDao processedCarsDao;
 
     /**
      * Empty constructor
@@ -40,8 +43,17 @@ public class CarTrackerService {
      *
      * @param carTracker is the CarTracker object that needs to be saved
      */
-    public void create(CarTracker carTracker) {
-        carTrackerDao.create(carTracker);
+    public CarTracker create(CarTracker carTracker) {
+        return this.carTrackerDao.create(carTracker);
+    }
+
+    /**
+     * Function to update a given CarTracker object in the database
+     *
+     * @param carTracker is the CarTracker object that needs to be updated
+     */
+    public CarTracker update(CarTracker carTracker) {
+        return this.carTrackerDao.update(carTracker);
     }
 
     /**
@@ -82,114 +94,149 @@ public class CarTrackerService {
     }
 
     /**
-     * Function to check if a given CarTrackerData object is 'safe'
+     * Replaces all the CarTrackers to JsonObjects.
      *
-     * @param carTrackerData is the given carTrackerData object that needs to be checked
+     * @param carTrackers are the CarTrackers that need to be replaced.
+     * @return the List of JsonObjects.
      */
-    public void runAllChecks(CarTracker carTrackerData) {
-        boolean storedDataCheck = storedDataCheck(carTrackerData);
-        boolean idCheck = idCheck(carTrackerData);
-        boolean sizeCheck = sizeCheck(carTrackerData);
-        boolean valueCheck = missingRuleValuesCheck(carTrackerData);
+    public List<JsonObject> replaceAllToJson(List<CarTracker> carTrackers) {
+        List<JsonObject> jsonObjects = new ArrayList<>();
+        for (CarTracker carTracker : carTrackers) {
+            jsonObjects.add(carTracker.toJson());
+        }
+        return jsonObjects;
+    }
 
-        if (idCheck && sizeCheck && valueCheck && storedDataCheck) {
-            carTrackerQueue.addQueue(carTrackerData);
-        } else {
-            processedCarsDao.create(new ProcessedCars(carTrackerData, new Date(), false));
+    //<editor-fold desc="All the CarTracker checks">
+
+    /**
+     * Method to update a CarTracker after the checks are run.
+     * First the CarTracker is searched in the DataBase and if
+     *
+     * @param carTracker is the CarTracker that will be updated.
+     */
+    public void processCarTracker(CarTracker carTracker) {
+        if (carTracker != null) {
+
+            System.out.println("Processing CarTracker" + carTracker.getId());
+            CarTracker foundCarTracker = this.findById(carTracker.getId());
+
+            boolean safe = this.executeAllCarTrackerChecks(carTracker);
+
+            if (safe) {
+                if (foundCarTracker != null) {
+                    foundCarTracker.addRules(carTracker.getRules());
+                    for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
+                        carTrackerRule.setCarTracker(foundCarTracker);
+                    }
+
+                    this.update(foundCarTracker);
+
+                    this.processedCarsDao.create(new ProcessedCar(foundCarTracker, new Date(), true));
+                } else {
+                    System.out.println("No CarTracker found with id: " + carTracker.getId());
+                }
+            } else {
+                this.processedCarsDao.create(new ProcessedCar(foundCarTracker, new Date(), false));
+            }
         }
     }
 
     /**
-     * TODO: Marc, even invullen s.v.p.
+     * Function to run all the checks for the given CarTracker.
+     * The function checks whether the CarTracker is 'safe'.
      *
-     * @param data
-     * @return
+     * @param carTracker is the given carTrackerData object that needs to be checked
      */
-    public boolean missingRuleValuesCheck(CarTracker data) {
+    public boolean executeAllCarTrackerChecks(CarTracker carTracker) {
+        System.out.println("Running checks");
 
-        long i = data.getRules().get(0).getRuleId();
-        for (CarTrackerRule carTrackerRule : data.getRules()) {
-            i++;
+        return this.idCheck(carTracker) && this.sizeCheck(carTracker)
+                && this.missingRuleValuesCheck(carTracker) && this.storedDataCheck(carTracker.getId());
 
-            if (carTrackerRule.getRuleId() != i) {
-                System.out.println("CarTrackerID:" + " " + data.getId() + " " + "RuleID:" + " " + carTrackerRule.getRuleId() + " " + "isn't equal with count");
+    }
+
+    /**
+     * This method checks whether there are missing value in the CarTrackers' CarTrackerRules.
+     *
+     * @param carTracker is the CarTracker from which the CarTrackerRules are checked.
+     * @return true when the CarTrackerRules are valid, false if not.
+     */
+    public boolean missingRuleValuesCheck(CarTracker carTracker) {
+
+        Long i = carTracker.getRules().get(0).getId();
+        for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
+            if (!carTrackerRule.getId().equals(i)) {
+                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+                        + carTrackerRule.getId() + " " + "isn't equal with count");
                 return false;
             }
-            if (carTrackerRule.getKmDriven().equals(null)) {
-                System.out.println("CarTrackerID:" + " " + data.getId() + " " + "RuleID:" + " " + carTrackerRule.getRuleId() + " " + "has null at KmDriven");
+            if (Objects.isNull(carTrackerRule.getKmDriven())) {
+                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+                        + carTrackerRule.getId() + " " + "has null at KmDriven");
                 return false;
             }
-            if (carTrackerRule.getDate().equals(null)) {
-                System.out.println("CarTrackerID:" + " " + data.getId() + " " + "RuleID:" + " " + carTrackerRule.getRuleId() + " " + "has null at Date");
+            if (Objects.isNull(carTrackerRule.getDate())) {
+                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+                        + carTrackerRule.getId() + " " + "has null at Date");
                 return false;
             }
             if (carTrackerRule.getLat() == 0) {
-                System.out.println("CarTrackerID:" + " " + data.getId() + " " + "RuleID:" + " " + carTrackerRule.getRuleId() + " " + "has 0 at lat");
+                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+                        + carTrackerRule.getId() + " " + "has 0 at lat");
                 return false;
             }
             if (carTrackerRule.getLon() == 0) {
-                System.out.println("CarTrackerID:" + " " + data.getId() + " " + "RuleID:" + " " + carTrackerRule.getRuleId() + " " + "has 0 at lon");
+                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+                        + carTrackerRule.getId() + " " + "has 0 at lon");
                 return false;
             }
+            i++;
         }
         return true;
     }
 
     /**
-     * TODO: Marc, even invullen s.v.p.
+     * Method that checks whether the size of the rules equals the TotalRules (field) of the CarTracker.
      *
-     * @param data
-     * @return a boolean if the size of the size ??
+     * @param carTracker the CarTracker which gets its Rules size checked.
+     * @return true if the size of the Rules is equal to the expectedRuleSize. False if not.
      */
-    public boolean sizeCheck(CarTracker data) {
+    public boolean sizeCheck(CarTracker carTracker) {
+        return carTracker.getRules().size() == carTracker.getTotalRules();
+    }
 
-        if (data.getTotalRules().equals((data.getRules().size()))) {
-            return true;
+    /**
+     * Checks whether the id of the last known CarTrackerRule +1 equals the newest CarTrackerRule id.
+     * So we know there are no missing id's (they count up).
+     *
+     * @param carTracker the CarTracker which gets is CarTrackerRule id's checked and validated.
+     * @return true if they match. False if they don't match.
+     */
+    public boolean idCheck(CarTracker carTracker) {
+        Long highestKnownRuleId = this.carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker);
+
+        CarTrackerRule foundCarTrackerRule = carTracker.getRules().get(0);
+        if (foundCarTrackerRule != null) {
+            return foundCarTrackerRule.getId().equals(highestKnownRuleId + 1);
         }
 
-        System.out.println("CarTrackerID:" + " " + data.getId() + " " + "Total number of rules doesn't match size of given rules");
+        System.out.println("CarTrackerId: " + carTracker.getId() + " New CarTrackerRuleId: " + carTracker.getRules().get(0).getId() + " doesn't match last database CarTrackerRuleId + 1: " + (highestKnownRuleId + 1));
         return false;
     }
 
     /**
-     * TODO: Marc
+     * Retrieves a List of unprocessed Cars.
      *
-     * @param data
-     * @return
+     * @param carTrackerId is the id of the CarTracker that needs its processedCars checked.
+     * @return true if there are no unprocessed cars.
      */
-    public boolean idCheck(CarTracker data) {
-
-        CarTracker carTracker = findById(data.getId());
-        List<CarTrackerRule> rules = carTracker.getRules();
-        long ruleID = rules.get(rules.size() - 1).getRuleId();
-        //hier moet ik even een query van maken
-
-        if (data.getRules().get(0).getRuleId().equals(ruleID + 1)) {
-            return true;
-        }
-
-        System.out.println("CarTrackerID:" + " " + data.getId() + " " + "New RuleID:" + " " + data.getRules().get(0).getRuleId() + " " + "doesn't match last database RuleID + 1:" + " " + (ruleID + 1));
-        return false;
+    public boolean storedDataCheck(Long carTrackerId) {
+        return this.processedCarsDao.getNotProcessedDataById(carTrackerId).isEmpty();
     }
+    //</editor-fold>
 
-
-    /**
-     * TODO: Marc
-     *
-     * @param data
-     * @return
-     */
-    public boolean storedDataCheck(CarTracker data) {
-        List<ProcessedCars> cars = processedCarsDao.getNotProcessedDataById(data.getId());
-
-        return cars.isEmpty();
-    }
-
-    public List<JsonObject> replaceAllToJson(List<CarTracker> carTrackers) {
-        List<JsonObject> jsonObjects = new ArrayList<JsonObject>();
-        for (CarTracker carTracker : carTrackers) {
-            jsonObjects.add(carTracker.toJson());
-        }
-        return jsonObjects;
+    public void setCarTrackerDao(CarTrackerDao carTrackerDao) {
+        this.carTrackerDao = carTrackerDao;
     }
 }

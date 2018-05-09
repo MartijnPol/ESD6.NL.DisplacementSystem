@@ -12,25 +12,23 @@ import java.util.Date;
         "endDate"
 })
 
-/**
- * Created by Martijn van der Pol on 13-03-18
- **/
 public class CarTrackerDataQuery {
 
     @JsonProperty("identificationNumber")
     private Long identificationNumber;
 
     @JsonProperty("startDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date startDate;
 
     @JsonProperty("endDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date endDate;
 
     public CarTrackerDataQuery() {
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     @JsonProperty("identificationNumber")
     public Long getIdentificationNumber() {
         return identificationNumber;
@@ -60,4 +58,5 @@ public class CarTrackerDataQuery {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    //</editor-fold>
 }

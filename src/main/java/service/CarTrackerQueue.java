@@ -17,17 +17,17 @@ public class CarTrackerQueue {
     }
 
     public void addQueue(CarTracker carTracker) {
-        queue.add(carTracker);
+        this.queue.add(carTracker);
 
-        if (queue.size() == 20) {
-            ProcessQueue(queue);
-            queue = new LinkedList<>();
+        if (this.queue.size() == 20) {
+            ProcessQueue(this.queue);
+            this.queue = new LinkedList<>();
         }
     }
 
     public void ProcessQueue(LinkedList<CarTracker> carTrackers) {
         for (CarTracker data : carTrackers) {
-            carTrackerService.create(data);
+            this.carTrackerService.create(data);
         }
     }
 }

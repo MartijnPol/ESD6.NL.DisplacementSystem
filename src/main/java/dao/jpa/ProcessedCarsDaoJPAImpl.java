@@ -1,21 +1,20 @@
 package dao.jpa;
 
-import dao.JPADisplacementSystem;
+import dao.JPA;
 import dao.ProcessedCarsDao;
-import domain.ProcessedCars;
+import domain.ProcessedCar;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-@JPADisplacementSystem
-public class ProcessedCarsDaoJPAImpl extends GenericDaoJPAImpl<ProcessedCars> implements ProcessedCarsDao {
+@JPA
+public class ProcessedCarsDaoJPAImpl extends GenericDaoJPAImpl<ProcessedCar> implements ProcessedCarsDao {
 
     @Override
-    public List<ProcessedCars> getNotProcessedDataById(long id) {
-        TypedQuery<ProcessedCars> query = entityManager.createNamedQuery("processedCars.getNotProcessedDataById", ProcessedCars.class);
-        query.setParameter("id", id);
-        return query.getResultList();
+    public List<ProcessedCar> getNotProcessedDataById(long id) {
+        return getEntityManager().createNamedQuery("processedCars.getNotProcessedDataById", ProcessedCar.class)
+                .setParameter("id", id)
+                .getResultList();
     }
 }

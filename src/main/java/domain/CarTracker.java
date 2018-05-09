@@ -1,32 +1,25 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@XmlRootElement
 @NamedQuery(name = "carTracker.findAllMovementsWithinPeriodByTrackerId", query = "SELECT cr FROM CarTrackerRule cr " +
         "WHERE cr.date BETWEEN :startDate AND :endDate AND cr.carTracker.id = :trackerId")
 public class CarTracker implements Serializable {
 
     @Id
-    @GeneratedValue
-    @JsonProperty
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty
     private Long totalRules;
 
-    @JsonProperty
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CarTrackerRule> rules;
 
     public CarTracker() {
@@ -39,6 +32,40 @@ public class CarTracker implements Serializable {
         this.rules = rules;
     }
 
+    public void setRules(List<CarTrackerRule> rules) {
+        this.rules = rules;
+        calculateTotalRules();
+    }
+
+    public void addRules(List<CarTrackerRule> rules) {
+        this.rules.addAll(rules);
+        calculateTotalRules();
+    }
+
+    private void calculateTotalRules() {
+        this.totalRules = (long) rules.size();
+    }
+
+    public JsonObject toJson() {
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+
+        for (CarTrackerRule carTrackerRule : rules) {
+            jsonArrayBuilder.add(carTrackerRule.toJson());
+        }
+
+        return Json.createObjectBuilder()
+                .add("CarTrackerId", this.id)
+                .add("totalRules", this.totalRules)
+                .add("CarTrackerRules", jsonArrayBuilder)
+                .build();
+    }
+
+    @Override
+    public String toString() {
+        return "Tracker [id=" + id + ", TotalRules=" + totalRules + ", rules=" + rules + "]";
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public Long getId() {
         return id;
     }
@@ -58,26 +85,5 @@ public class CarTracker implements Serializable {
     public List<CarTrackerRule> getRules() {
         return rules;
     }
-
-    public void setRules(List<CarTrackerRule> rules) {
-        this.rules = rules;
-    }
-
-    public JsonObject toJson() {
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-
-        for (CarTrackerRule carTrackerRule : rules) {
-            jsonArrayBuilder.add(carTrackerRule.toJson());
-        }
-
-        return Json.createObjectBuilder()
-                .add("CarTrackerId", this.id)
-                .add("carTrackerRules", jsonArrayBuilder)
-                .build();
-    }
-
-    @Override
-    public String toString() {
-        return "Tracker [id=" + id + ", TotalRules=" + totalRules + ", rules=" + rules + "]";
-    }
+    //</editor-fold>
 }

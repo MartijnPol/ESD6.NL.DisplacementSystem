@@ -15,13 +15,13 @@ public class CarTrackerTest {
     @Before
     public void setUp() {
         carTracker = new CarTracker();
-        carTrackerRules = new ArrayList<CarTrackerRule>();
+        carTrackerRules = new ArrayList<>();
     }
 
     @Test
     public void createCarTracker() {
-        carTrackerRules.add(new CarTrackerRule(1L, carTracker, 2L, new Date(), 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(2L, carTracker, 3L, new Date(), 51.523677, 5.064195, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 3L, new Date(), 51.523677, 5.064195, true));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());
@@ -33,7 +33,7 @@ public class CarTrackerTest {
 
     @Test
     public void getCarTrackerRules() {
-        carTrackerRules.add(new CarTrackerRule(1L, carTracker,2L, new Date(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());
@@ -44,8 +44,10 @@ public class CarTrackerTest {
         List<CarTrackerRule> rules = carTracker.getRules();
         CarTrackerRule firstCarTrackerRule = rules.get(0);
 
+        Long expected = firstCarTrackerRule.getId();
+
         Assert.assertEquals(new Long(2), firstCarTrackerRule.getKmDriven());
-        Assert.assertEquals(new Long(1), firstCarTrackerRule.getRuleId());
+        Assert.assertEquals(expected, firstCarTrackerRule.getId());
         Assert.assertEquals(true, firstCarTrackerRule.isDriven());
     }
 }
