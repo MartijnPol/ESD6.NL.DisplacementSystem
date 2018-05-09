@@ -3,6 +3,7 @@ package boundary.rest;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import jms.MessageProducer;
+import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
 
 import javax.ejb.Stateless;
@@ -82,6 +83,10 @@ public class CarTrackerResource {
     public Response updateCarTracker(CarTracker carTracker) {
         if (carTracker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        if (carTracker.getId() == null || CollectionUtils.isEmpty(carTracker.getRules())) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         messageProducer.sendMessage(carTracker);
