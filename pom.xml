@@ -24,20 +24,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-rest-client-api</artifactId>
-            <version>1.0.0.Alpha4</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Arquillian JUnit integration -->
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -111,25 +97,6 @@
         </dependency>
 
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.4.0.Final</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.extension</groupId>
-                <artifactId>arquillian-rest-warp-bom</artifactId>
-                <version>1.0.0.Alpha4</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <finalName>DisplacementSystem</finalName>
