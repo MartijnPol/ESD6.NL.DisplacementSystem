@@ -107,9 +107,7 @@ public class CarTrackerService {
         return jsonObjects;
     }
 
-
     //<editor-fold desc="All the CarTracker checks">
-
 
     /**
      * Method to update a CarTracker after the checks are run.

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -52,7 +53,8 @@ public class CarTrackerRule implements Serializable {
     }
 
     public JsonObject toJson() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Locale location = new Locale.Builder().setLanguage("nl").setRegion("NL").build();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", location);
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
