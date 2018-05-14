@@ -9,10 +9,10 @@ import java.util.Date;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "processedCars.getNotProcessedDataById",
-                query = "SELECT p FROM ProcessedCars p WHERE p.processed = false AND p.carTracker.id = :id")
+                query = "SELECT p FROM ProcessedCar p WHERE p.processed = false AND p.carTracker.id = :id")
 
 })
-public class ProcessedCars implements Serializable {
+public class ProcessedCar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +27,18 @@ public class ProcessedCars implements Serializable {
 
     private boolean processed;
 
-    public ProcessedCars() {
+    public ProcessedCar() {
     }
 
-    public ProcessedCars(CarTracker carTracker, Date date, boolean processed) {
+    public ProcessedCar(CarTracker carTracker, Date date, boolean processed) {
         this.carTracker = carTracker;
         this.date = date;
         this.processed = processed;
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
+    public Long getId() {
+        return id;
     }
 
     public CarTracker getCarTracker() {
@@ -59,4 +64,5 @@ public class ProcessedCars implements Serializable {
     public void setProcessed(boolean processed) {
         this.processed = processed;
     }
+    //</editor-fold>
 }

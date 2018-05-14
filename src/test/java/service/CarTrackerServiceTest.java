@@ -1,7 +1,6 @@
 package service;
 
 import dao.CarTrackerDao;
-import dao.ProcessedCarsDao;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
@@ -16,9 +15,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,8 +35,14 @@ public class CarTrackerServiceTest {
     private Date dateThree;
     private Date dateFour;
 
+    private CarTrackerRule carTrackerRule1;
+    private CarTrackerRule carTrackerRule2;
+    private CarTrackerRule carTrackerRule3;
     @Mock
     private CarTrackerDao carTrackerDao;
+
+    @Mock
+    private CarTrackerService carTrackerServiceMock;
 
     @Before
     public void setUp() {
@@ -45,14 +50,20 @@ public class CarTrackerServiceTest {
         carTrackerService = new CarTrackerService();
         carTrackerService.setCarTrackerDao(carTrackerDao);
 
-        carTracker = new CarTracker();
-        carTrackerRules = new ArrayList<>();
-        //carTrackerDataQueries = new CarTrackerDataQuery[]();
-
         dateOne = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
         dateTwo = new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime();
         dateThree = new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime();
         dateFour = new GregorianCalendar(2017, Calendar.DECEMBER, 4).getTime();
+
+        carTracker = new CarTracker();
+        this.carTracker.setId(1L);
+        carTrackerRules = new ArrayList<>();
+        this.carTrackerRule1 =
+                new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+        this.carTrackerRule2 =
+                new CarTrackerRule(carTracker, 3L, dateTwo, 51.560596, 5.091914, true);
+        this.carTrackerRule3 =
+                new CarTrackerRule(carTracker, 4L, dateThree, 51.560596, 5.091914, true);
     }
 
     @Test
@@ -86,19 +97,60 @@ public class CarTrackerServiceTest {
         //when(carTrackerService.getRulesWithinMultiplePeriods(carTrackerDataQueries))
     }
 
-    @Ignore
     @Test
     public void runAllChecks_CarTracker_None() {
-        carTrackerService.runAllChecks(carTracker);
+        this.carTracker.addRules(Arrays.asList(carTrackerRule1, carTrackerRule2, carTrackerRule3));
+        this.carTrackerService.create(this.carTracker);
+        verify(carTrackerDao, Mockito.times(1)).create(carTracker);
+        this.carTrackerServiceMock.executeAllCarTrackerChecks(this.carTracker);
     }
 
-    @Ignore
     @Test
     public void missingRuleValuesCheck_CarTracker_True() {
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
-        carTracker.setRules(carTrackerRules);
-        carTracker.setTotalRules(1L);
-        assertTrue(carTrackerService.missingRuleValuesCheck(carTracker));
+        this.carTrackerRule1.setId(1L);
+        this.carTrackerRules.add(this.carTrackerRule1);
+        this.carTracker.setRules(this.carTrackerRules);
+        boolean missingValues = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
+
+        assertSame(true, missingValues);
+    }
+
+    @Test
+    public void missingRuleValuesCheck_CarTracker_False() {
+        this.carTrackerRule1.setId(1L);
+        this.carTrackerRules.add(this.carTrackerRule1);
+        this.carTracker.setRules(this.carTrackerRules);
+        this.carTrackerRule1.setKmDriven(null);
+        boolean kmDriven = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
+
+        assertSame(false, kmDriven);
+
+        this.carTrackerRule1.setKmDriven(2L);
+        this.carTrackerRule1.setDate(null);
+        boolean date = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
+
+        assertSame(false, date);
+
+        this.carTrackerRule1.setDate(new Date());
+        this.carTrackerRule1.setLat(0);
+        boolean lat = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
+        assertSame(false, lat);
+
+        this.carTrackerRule1.setLat(234);
+        this.carTrackerRule1.setLon(0);
+        boolean lon = this.carTrackerService.missingRuleValuesCheck(carTracker);
+        assertSame(false, lon);
+    }
+
+    @Test
+    public void missingRuleValuesCheck_CarTracker_FalseDate() {
+        this.carTrackerRule1.setId(1L);
+        this.carTrackerRules.add(this.carTrackerRule1);
+        this.carTracker.setRules(this.carTrackerRules);
+        this.carTrackerRule1.setDate(null);
+        boolean missingValues = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
+
+        assertSame(false, missingValues);
     }
 
     @Ignore

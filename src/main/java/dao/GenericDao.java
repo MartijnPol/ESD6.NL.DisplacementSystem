@@ -1,5 +1,6 @@
 package dao;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public interface GenericDao<T> {
@@ -13,6 +14,8 @@ public interface GenericDao<T> {
     void delete(T t);
 
     T findById(Long id);
+
+    T oneResult(TypedQuery<T> query);
 
     List<T> findAll();
 }

@@ -3,7 +3,6 @@ package service;
 import dao.AuthenticationDao;
 import domain.Credentials;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +45,8 @@ public class AuthenticationServiceTest {
 
         credentials = new Credentials("AccountAdministrationSystem");
         credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
-        credentials = new Credentials("PoliceAdministrationSystem");
-        credentials.setToken("d0rqi49b81635t6m1icpf7hrmf");
+        credentialsSecond = new Credentials("PoliceAdministrationSystem");
+        credentialsSecond.setToken("d0rqi49b81635t6m1icpf7hrmf");
         dateFuture = DateUtils.addMonths(new Date(), 1);
         datePast = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
         dateToday = new Date();

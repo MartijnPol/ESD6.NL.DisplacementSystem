@@ -12,12 +12,10 @@ import javax.ejb.Stateless;
 @Stateless
 public class LogService {
 
-    private SentryClient sentryClient;
-
     public void logOverloadRequestError(String message) {
         Sentry.init();
 
-        sentryClient = SentryClientFactory.sentryClient();
+        SentryClient sentryClient = SentryClientFactory.sentryClient();
         Sentry.capture(message);
     }
 }

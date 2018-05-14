@@ -4,7 +4,6 @@ import dao.CarTrackerDao;
 import dao.JPA;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.List;
 @JPA
 public class CarTrackerDaoJPAImpl extends GenericDaoJPAImpl<CarTracker> implements CarTrackerDao {
 
+    @SuppressWarnings("unchecked")
     @Override
     public CarTracker getRulesWithinPeriod(Long trackerId, Date startDate, Date endDate) {
         List rules = this.entityManager.createNamedQuery("carTracker.findAllMovementsWithinPeriodByTrackerId")
@@ -36,10 +36,4 @@ public class CarTrackerDaoJPAImpl extends GenericDaoJPAImpl<CarTracker> implemen
         }
         return carTrackerList;
     }
-
-    @Override
-    public long getLastRuleId() {
-        throw new NotImplementedException();
-    }
-
 }

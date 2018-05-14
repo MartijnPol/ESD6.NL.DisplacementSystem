@@ -5,13 +5,13 @@ import service.CarTrackerService;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import java.time.Instant;
 
 @MessageDriven(mappedName = "jms/GlassFishQueue", activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
@@ -22,9 +22,9 @@ import javax.jms.ObjectMessage;
 public class MessageBean implements MessageListener {
 
     @Inject
-    CarTrackerService cartrackerService;
+    private CarTrackerService cartrackerService;
 
-    int i = 0;
+    private int i = 0;
 
     public MessageBean() {
     }
@@ -32,12 +32,17 @@ public class MessageBean implements MessageListener {
     @Override
     public void onMessage(Message message) {
         ObjectMessage msg = (ObjectMessage) message;
-        CarTracker carTracker = null;
+        CarTracker carTracker;
         try {
             carTracker = (CarTracker) msg.getObject();
-            i++;
+            this.i++;
             System.out.println(i + " " + "TEST" + " " + carTracker.toString());
-            cartrackerService.runAllChecks(carTracker);
+            long startTime = Instant.now().getEpochSecond();
+            this.cartrackerService.processCarTracker(carTracker);
+            long endTime = Instant.now().getEpochSecond();
+
+            long duration = (endTime - startTime);
+            System.out.println("The time that processing the data of: " + carTracker.getId() +  " = " + duration);
         } catch (JMSException e) {
             e.printStackTrace();
         }

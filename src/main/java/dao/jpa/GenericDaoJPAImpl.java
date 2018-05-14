@@ -6,6 +6,7 @@ import dao.JPA;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -48,6 +49,11 @@ public abstract class GenericDaoJPAImpl<T> implements GenericDao<T> {
 
     public List<T> findAll() {
         return entityManager.createQuery("SELECT t FROM " + type.getSimpleName() + " t", type).getResultList();
+    }
+
+    public T oneResult(TypedQuery<T> query) {
+        query.setMaxResults(1);
+        return query.getResultList().isEmpty() ? null : query.getResultList().get(0);
     }
 
     public EntityManager getEntityManager() {

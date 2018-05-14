@@ -11,7 +11,4 @@ public interface CarTrackerDao extends GenericDao<CarTracker> {
     CarTracker getRulesWithinPeriod(Long id, Date from, Date to);
 
     List<CarTracker> getRulesWithinMultiplePeriods(CarTrackerDataQuery[] carTrackerDataQueries);
-
-    long getLastRuleId();
-
 }

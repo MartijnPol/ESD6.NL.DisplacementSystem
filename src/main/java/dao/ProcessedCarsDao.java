@@ -1,10 +1,10 @@
 package dao;
 
-import domain.ProcessedCars;
+import domain.ProcessedCar;
 
 import java.util.List;
 
-public interface ProcessedCarsDao extends GenericDao<ProcessedCars> {
+public interface ProcessedCarsDao extends GenericDao<ProcessedCar> {
 
-    List<ProcessedCars> getNotProcessedDataById(long id);
+    List<ProcessedCar> getNotProcessedDataById(long id);
 }

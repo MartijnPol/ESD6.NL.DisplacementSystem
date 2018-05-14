@@ -1,6 +1,7 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity
@@ -22,12 +24,13 @@ public class CarTrackerRule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private CarTracker carTracker;
 
     private Long kmDriven;
 
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date date;
 
@@ -50,11 +53,12 @@ public class CarTrackerRule implements Serializable {
     }
 
     public JsonObject toJson() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Locale location = new Locale.Builder().setLanguage("nl").setRegion("NL").build();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", location);
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("kmDriven" , this.kmDriven)
+                .add("kmDriven", this.kmDriven)
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)

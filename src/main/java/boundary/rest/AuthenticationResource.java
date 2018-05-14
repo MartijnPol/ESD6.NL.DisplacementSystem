@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 public class AuthenticationResource {
 
     @Inject
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
 
     /**
      * Function for authenticating credentials.
@@ -36,7 +36,7 @@ public class AuthenticationResource {
 
         boolean authenticate = authenticationService.authenticate(applicationName);
 
-        if (authenticate != true) {
+        if (!authenticate) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 

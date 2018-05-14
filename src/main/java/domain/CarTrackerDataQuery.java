@@ -12,9 +12,6 @@ import java.util.Date;
         "endDate"
 })
 
-/**
- * Created by Martijn van der Pol on 13-03-18
- **/
 public class CarTrackerDataQuery {
 
     @JsonProperty("identificationNumber")
@@ -31,6 +28,7 @@ public class CarTrackerDataQuery {
     public CarTrackerDataQuery() {
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     @JsonProperty("identificationNumber")
     public Long getIdentificationNumber() {
         return identificationNumber;
@@ -60,4 +58,5 @@ public class CarTrackerDataQuery {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    //</editor-fold>
 }

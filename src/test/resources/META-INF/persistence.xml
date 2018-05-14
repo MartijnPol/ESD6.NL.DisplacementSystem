@@ -3,7 +3,7 @@
   <persistence-unit name="CarTackerTestPU" transaction-type="RESOURCE_LOCAL">
     <class>domain.CarTracker</class>
     <class>domain.CarTrackerRule</class>
-    <class>domain.ProcessedCars</class>
+    <class>domain.ProcessedCar</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/displacement_systemTest"/>

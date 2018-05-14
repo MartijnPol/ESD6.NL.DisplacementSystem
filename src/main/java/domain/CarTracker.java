@@ -1,7 +1,5 @@
 package domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -21,7 +19,7 @@ public class CarTracker implements Serializable {
 
     private Long totalRules;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "carTracker")
     private List<CarTrackerRule> rules;
 
     public CarTracker() {
@@ -34,26 +32,6 @@ public class CarTracker implements Serializable {
         this.rules = rules;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getTotalRules() {
-        return totalRules;
-    }
-
-    public void setTotalRules(Long totalRules) {
-        this.totalRules = totalRules;
-    }
-
-    public List<CarTrackerRule> getRules() {
-        return rules;
-    }
-
     public void setRules(List<CarTrackerRule> rules) {
         this.rules = rules;
         calculateTotalRules();
@@ -64,10 +42,9 @@ public class CarTracker implements Serializable {
         calculateTotalRules();
     }
 
-    public void calculateTotalRules() {
+    private void calculateTotalRules() {
         this.totalRules = (long) rules.size();
     }
-
 
     public JsonObject toJson() {
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
@@ -87,4 +64,26 @@ public class CarTracker implements Serializable {
     public String toString() {
         return "Tracker [id=" + id + ", TotalRules=" + totalRules + ", rules=" + rules + "]";
     }
+
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getTotalRules() {
+        return totalRules;
+    }
+
+    public void setTotalRules(Long totalRules) {
+        this.totalRules = totalRules;
+    }
+
+    public List<CarTrackerRule> getRules() {
+        return rules;
+    }
+    //</editor-fold>
 }

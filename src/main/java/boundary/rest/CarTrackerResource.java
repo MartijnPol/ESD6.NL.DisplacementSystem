@@ -3,6 +3,7 @@ package boundary.rest;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import jms.MessageProducer;
+import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
 
 import javax.ejb.Stateless;
@@ -35,7 +36,7 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
-    @Secured
+//    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
@@ -84,6 +85,10 @@ public class CarTrackerResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
+        if (carTracker.getId() == null || CollectionUtils.isEmpty(carTracker.getRules())) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
         messageProducer.sendMessage(carTracker);
 
         URI id = URI.create(carTracker.getId().toString());
@@ -92,7 +97,7 @@ public class CarTrackerResource {
 
     /**
      * Function to get CarTrackerData according to a given TrackerId
-     * The database is searched for a cartracker that matches the provided id.
+     * The database is searched for a CarTracker that matches the provided id.
      * When the search return empty a response status not found is thrown (404).
      *
      * @param id trackerId that represents an existing CarTracker
