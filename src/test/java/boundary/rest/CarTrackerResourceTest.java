@@ -24,7 +24,7 @@ public class CarTrackerResourceTest {
                 get("CarTrackers").
                 then().
                 statusCode(200).
-                body("size()", equalTo(1),
+                body("size()", equalTo(37),
                         "[0].CarTrackerId", equalTo(1));
     }
 
@@ -36,7 +36,7 @@ public class CarTrackerResourceTest {
                 then().
                 statusCode(200).
                 body("CarTrackerId", equalTo(1),
-                        "CarTrackerRules.size()", equalTo(3));
+                        "CarTrackerRules.size()", equalTo(8));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class CarTrackerResourceTest {
                 then().
                 statusCode(200).
                 body("CarTrackerId", equalTo(1),
-                        "CarTrackerRules.size()", equalTo(3),
+                        "CarTrackerRules.size()", equalTo(8),
                         "CarTrackerRules[0].id", equalTo(1),
                         "CarTrackerRules[0].driven", equalTo(true));
     }
