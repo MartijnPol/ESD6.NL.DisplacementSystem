@@ -151,8 +151,12 @@ public class CarTrackerService {
     public boolean executeAllCarTrackerChecks(CarTracker carTracker) {
         System.out.println("Running checks");
 
-        return this.idCheck(carTracker) && this.sizeCheck(carTracker)
-                && this.missingRuleValuesCheck(carTracker) && this.storedDataCheck(carTracker.getId());
+        boolean idCheck = this.idCheck(carTracker);
+        boolean sizeCheck = this.sizeCheck(carTracker);
+        boolean missingRuleValuesCheck = this.missingRuleValuesCheck(carTracker);
+        boolean storedDataCheck = this.storedDataCheck(carTracker.getId());
+
+        return idCheck && sizeCheck && missingRuleValuesCheck && storedDataCheck;
 
     }
 

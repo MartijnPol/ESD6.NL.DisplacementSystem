@@ -63,7 +63,6 @@ public class JmsResource {
         carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 8L, new GregorianCalendar(2018, Calendar.OCTOBER, 3).getTime(), 52.523677, 8.064195, true));
 
         carTrackerTest.addRules(carTrackerRulesTest);
-        carTrackerTest.setTotalRules(carTrackerTest.getTotalRules() + carTrackerRulesTest.size());
         for (CarTrackerRule rule : carTrackerRulesTest) {
             carTrackerRuleDao.create(rule);
         }

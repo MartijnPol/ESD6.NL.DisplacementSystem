@@ -11,6 +11,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import java.time.Instant;
 
 @MessageDriven(mappedName = "jms/GlassFishQueue", activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
@@ -36,7 +37,12 @@ public class MessageBean implements MessageListener {
             carTracker = (CarTracker) msg.getObject();
             this.i++;
             System.out.println(i + " " + "TEST" + " " + carTracker.toString());
+            long startTime = Instant.now().getEpochSecond();
             this.cartrackerService.processCarTracker(carTracker);
+            long endTime = Instant.now().getEpochSecond();
+
+            long duration = (endTime - startTime);
+            System.out.println("The time that processing the data of: " + carTracker.getId() +  " = " + duration);
         } catch (JMSException e) {
             e.printStackTrace();
         }

@@ -21,9 +21,9 @@ public class JsonReader {
 
     public CarTracker readJsonFiles() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        CarTracker tracker = mapper.readValue(new File("E:\\Fontys\\ESD\\ESD6.NL.DisplacementSystem\\TestFiles\\test.json"), CarTracker.class);
-        System.out.println("JsonReader" + " " + tracker.toString());
-        return tracker;
+        CarTracker carTracker = mapper.readValue(new File("D:\\Documents\\GitHub\\ESD6.RekeningRijden\\ESD6.NL.DisplacementSystem\\TestFiles\\test.json"), CarTracker.class);
+        System.out.println("JsonReader" + " " + carTracker.toString());
+        return carTracker;
     }
 
     public CarTracker updateCarTracker(CarTracker newCarTracker) {

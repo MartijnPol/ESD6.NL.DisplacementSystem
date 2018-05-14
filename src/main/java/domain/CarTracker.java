@@ -19,7 +19,7 @@ public class CarTracker implements Serializable {
 
     private Long totalRules;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "carTracker")
     private List<CarTrackerRule> rules;
 
     public CarTracker() {
