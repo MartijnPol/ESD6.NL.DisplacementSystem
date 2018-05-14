@@ -83,7 +83,6 @@ public class JmsResource {
             e.printStackTrace();
         }
 
-
         messageProducer.sendMessage(carTracker);
 
         return "Test cartracker json ingevoerd";
