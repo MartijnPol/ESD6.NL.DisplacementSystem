@@ -220,12 +220,12 @@ public class CarTrackerService {
     public boolean idCheck(CarTracker carTracker) {
         Long highestKnownRuleId = this.carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker);
 
-        CarTrackerRule foundCarTrackerRule = carTracker.getRules().get(0);
-        if (foundCarTrackerRule != null) {
+        if (!carTracker.getRules().isEmpty()) {
+            CarTrackerRule foundCarTrackerRule = carTracker.getRules().get(0);
             return foundCarTrackerRule.getId().equals(highestKnownRuleId + 1);
         }
 
-        System.out.println("CarTrackerId: " + carTracker.getId() + " New CarTrackerRuleId: " + carTracker.getRules().get(0).getId() + " doesn't match last database CarTrackerRuleId + 1: " + (highestKnownRuleId + 1));
+        System.out.println("CarTrackerId: " + carTracker.getId() + " New CarTrackerRuleId doesn't match last database CarTrackerRuleId + 1: " + (highestKnownRuleId + 1));
         return false;
     }
 
@@ -242,5 +242,13 @@ public class CarTrackerService {
 
     public void setCarTrackerDao(CarTrackerDao carTrackerDao) {
         this.carTrackerDao = carTrackerDao;
+    }
+
+    public void setCarTrackerRuleDao(CarTrackerRuleDao carTrackerRuleDao) {
+        this.carTrackerRuleDao = carTrackerRuleDao;
+    }
+
+    public void setProcessedCarsDao(ProcessedCarsDao processedCarsDao) {
+        this.processedCarsDao = processedCarsDao;
     }
 }
