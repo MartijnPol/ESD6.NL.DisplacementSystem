@@ -9,10 +9,8 @@ import service.CarTrackerService;
 import service.JsonReader;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,5 +84,30 @@ public class JmsResource {
         messageProducer.sendMessage(carTracker);
 
         return "Test cartracker json ingevoerd";
+    }
+
+    /**
+     * Updates a CarTracker with new rules and sends the CarTracker into the Queue.
+     *
+     * @param carTracker is the CarTracker to be updated.
+     * @return an Exception or Ok Response.
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateCarTracker(CarTracker carTracker) {
+        if (carTracker == null || carTracker.getId() == null) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+
+        }
+        CarTracker foundCarTracker = carTrackerService.findById(carTracker.getId());
+
+        if (foundCarTracker == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        this.messageProducer.sendMessage(carTracker);
+
+        return Response.ok().build();
     }
 }
