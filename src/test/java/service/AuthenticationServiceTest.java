@@ -28,7 +28,6 @@ public class AuthenticationServiceTest {
     private Credentials credentials;
     private Credentials credentialsSecond;
     private Date dateFuture;
-    private Date dateToday;
     private Date datePast;
 
     @Mock
@@ -49,7 +48,7 @@ public class AuthenticationServiceTest {
         credentialsSecond.setToken("d0rqi49b81635t6m1icpf7hrmf");
         dateFuture = DateUtils.addMonths(new Date(), 1);
         datePast = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
-        dateToday = new Date();
+        Date dateToday = new Date();
     }
 
     @Test

@@ -1,13 +1,15 @@
 package service;
 
 import dao.CarTrackerDao;
+import dao.CarTrackerRuleDao;
+import dao.ProcessedCarsDao;
 import domain.CarTracker;
-import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
+import domain.ProcessedCar;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -28,18 +30,22 @@ public class CarTrackerServiceTest {
 
     private CarTracker carTracker;
     private List<CarTrackerRule> carTrackerRules;
-    private CarTrackerDataQuery[] carTrackerDataQueries;
 
     private Date dateOne;
     private Date dateTwo;
-    private Date dateThree;
-    private Date dateFour;
 
     private CarTrackerRule carTrackerRule1;
     private CarTrackerRule carTrackerRule2;
     private CarTrackerRule carTrackerRule3;
+
+    @Mock
+    private CarTrackerRuleDao carTrackerRuleDao;
+
     @Mock
     private CarTrackerDao carTrackerDao;
+
+    @Mock
+    private ProcessedCarsDao processedCarsDao;
 
     @Mock
     private CarTrackerService carTrackerServiceMock;
@@ -49,13 +55,16 @@ public class CarTrackerServiceTest {
         MockitoAnnotations.initMocks(this);
         carTrackerService = new CarTrackerService();
         carTrackerService.setCarTrackerDao(carTrackerDao);
+        carTrackerService.setCarTrackerRuleDao(carTrackerRuleDao);
+        carTrackerService.setProcessedCarsDao(processedCarsDao);
 
         dateOne = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
         dateTwo = new GregorianCalendar(2017, Calendar.DECEMBER, 2).getTime();
-        dateThree = new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime();
-        dateFour = new GregorianCalendar(2017, Calendar.DECEMBER, 4).getTime();
+        Date dateThree = new GregorianCalendar(2017, Calendar.DECEMBER, 3).getTime();
+        Date dateFour = new GregorianCalendar(2017, Calendar.DECEMBER, 4).getTime();
 
         carTracker = new CarTracker();
+        carTracker.setTotalRules(3L);
         this.carTracker.setId(1L);
         carTrackerRules = new ArrayList<>();
         this.carTrackerRule1 =
@@ -90,11 +99,6 @@ public class CarTrackerServiceTest {
         when(carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo)).thenReturn(carTracker);
         CarTracker carTrackerFound = carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo);
         assertThat(carTrackerFound, is(carTracker));
-    }
-
-    @Test
-    public void getRulesWithinMultiplePeriods_CarTrackerDataQuery_CarTrackerListFound() {
-        //when(carTrackerService.getRulesWithinMultiplePeriods(carTrackerDataQueries))
     }
 
     @Test
@@ -153,22 +157,101 @@ public class CarTrackerServiceTest {
         assertSame(false, missingValues);
     }
 
-    @Ignore
     @Test
-    public void sizeCheck_CarTracker_True() {
+    public void sizeCheck_CarTracker_CorrectCheck() {
+        this.carTrackerRules.add(carTrackerRule1);
+        this.carTracker.setRules(this.carTrackerRules);
+        this.carTracker.setTotalRules(1L);
 
+        boolean isSizeCorrect = this.carTrackerService.sizeCheck(this.carTracker);
+
+        assertSame(true, isSizeCorrect);
+
+        this.carTrackerRules.add(carTrackerRule2);
+        this.carTracker.setRules(this.carTrackerRules);
+        this.carTracker.setTotalRules(2L);
+
+        boolean isSizeCorrectTrue = this.carTrackerService.sizeCheck(this.carTracker);
+
+        assertSame(true, isSizeCorrectTrue);
     }
 
-    @Ignore
     @Test
-    public void idCheck_CarTracker_True() {
+    public void idCheck_CarTracker_CorrectCheck() {
+        this.carTrackerRule1.setId(2L);
+        this.carTrackerRules.add(carTrackerRule1);
+        this.carTracker.addRules(carTrackerRules);
+        this.carTrackerService.create(carTracker);
 
+        when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(1L);
+
+        boolean idCheckCorrect = this.carTrackerService.idCheck(carTracker);
+
+        assertSame(true, idCheckCorrect);
     }
 
-    @Ignore
     @Test
-    public void storedDataCheck_CarTrackerData_True() {
+    public void idCheck_CarTracker_FalseCheck() {
+        this.carTrackerRule1.setId(2L);
+        this.carTrackerRules.add(carTrackerRule1);
+        this.carTracker.addRules(carTrackerRules);
+        this.carTrackerService.create(carTracker);
 
+        when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(2L);
+
+        boolean idCheckIncorrect = this.carTrackerService.idCheck(carTracker);
+
+        assertSame(false, idCheckIncorrect);
+    }
+
+    @Test
+    public void idCheck_CarTracker_EmptyRulesCheck() {
+        this.carTrackerService.create(carTracker);
+
+        when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(2L);
+
+        boolean idCheckIncorrect = this.carTrackerService.idCheck(carTracker);
+
+        assertSame(false, idCheckIncorrect);
+    }
+
+    @Test
+    public void executeAllCarTrackerChecks_CarTracker_CorrectCheck() {
+        this.carTrackerRule1.setId(2L);
+        this.carTrackerRules.add(carTrackerRule1);
+        this.carTracker.addRules(carTrackerRules);
+        this.carTracker.setTotalRules(1L);
+        this.carTracker.setId(1L);
+        this.carTrackerService.create(carTracker);
+
+        List<ProcessedCar> processedCars = new ArrayList<>();
+
+        when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(1L);
+        when(processedCarsDao.getNotProcessedDataById(Matchers.eq(1L))).thenReturn(processedCars);
+
+        boolean allCarTrackerChecks = this.carTrackerService.executeAllCarTrackerChecks(carTracker);
+
+        assertSame(true, allCarTrackerChecks);
+    }
+
+    @Test
+    public void executeAllCarTrackerChecks_CarTracker_IncorrectCheck() {
+        this.carTrackerRule1.setId(2L);
+        this.carTrackerRules.add(carTrackerRule1);
+        this.carTracker.addRules(carTrackerRules);
+        this.carTracker.setTotalRules(1L);
+        this.carTracker.setId(1L);
+        this.carTrackerService.create(carTracker);
+
+        List<ProcessedCar> processedCars = new ArrayList<>();
+        processedCars.add(new ProcessedCar());
+
+        when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(1L);
+        when(processedCarsDao.getNotProcessedDataById(Matchers.eq(1L))).thenReturn(processedCars);
+
+        boolean allCarTrackerChecks = this.carTrackerService.executeAllCarTrackerChecks(carTracker);
+
+        assertSame(false, allCarTrackerChecks);
     }
 }
 
