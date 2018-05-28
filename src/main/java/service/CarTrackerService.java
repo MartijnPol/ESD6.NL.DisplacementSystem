@@ -62,7 +62,7 @@ public class CarTrackerService {
      * @param id is the given Id that belongs to a CarTracker data object
      * @return the found object belonging to the given Id
      */
-    public CarTracker findById(Long id) {
+    public CarTracker findById(String id) {
         return this.carTrackerDao.findById(id);
     }
 
@@ -80,7 +80,7 @@ public class CarTrackerService {
      *
      * @return a list of found CarTrackerData
      */
-    public CarTracker getRulesWithinPeriod(Long identificationNumber, Date start, Date end) {
+    public CarTracker getRulesWithinPeriod(String identificationNumber, Date start, Date end) {
         return carTrackerDao.getRulesWithinPeriod(identificationNumber, start, end);
     }
 
@@ -119,7 +119,7 @@ public class CarTrackerService {
         if (carTracker != null) {
 
             System.out.println("Processing CarTracker" + carTracker.getId());
-            CarTracker foundCarTracker = this.findById(carTracker.getId());
+            CarTracker foundCarTracker = this.findById("NLD1");
 
             boolean safe = this.executeAllCarTrackerChecks(carTracker);
 
@@ -235,7 +235,7 @@ public class CarTrackerService {
      * @param carTrackerId is the id of the CarTracker that needs its processedCars checked.
      * @return true if there are no unprocessed cars.
      */
-    public boolean storedDataCheck(Long carTrackerId) {
+    public boolean storedDataCheck(String carTrackerId) {
         return this.processedCarsDao.getNotProcessedDataById(carTrackerId).isEmpty();
     }
     //</editor-fold>

@@ -38,7 +38,7 @@ public class JmsResource {
 
     @Path("{id}")
     @GET
-    public String startJMS(@PathParam("id") Long id) {
+    public String startJMS(@PathParam("id") String id) {
         CarTracker carTracker = carTrackerService.findById(id);
         messageProducer.sendMessage(carTracker);
 
@@ -52,7 +52,7 @@ public class JmsResource {
     @Path("/TestCartracker")
     public String TestCarTracker() {
 
-        long id = 1;
+        String id = "NLD1";
         CarTracker carTrackerTest = carTrackerService.findById(id);
         System.out.println(carTrackerTest.toString());
         List<CarTrackerRule> carTrackerRulesTest = new ArrayList<>();

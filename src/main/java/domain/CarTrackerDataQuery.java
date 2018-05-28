@@ -15,7 +15,7 @@ import java.util.Date;
 public class CarTrackerDataQuery {
 
     @JsonProperty("identificationNumber")
-    private Long identificationNumber;
+    private String identificationNumber;
 
     @JsonProperty("startDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -30,12 +30,12 @@ public class CarTrackerDataQuery {
 
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     @JsonProperty("identificationNumber")
-    public Long getIdentificationNumber() {
+    public String getIdentificationNumber() {
         return identificationNumber;
     }
 
     @JsonProperty("identificationNumber")
-    public void setIdentificationNumber(Long identificationNumber) {
+    public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
     }
 

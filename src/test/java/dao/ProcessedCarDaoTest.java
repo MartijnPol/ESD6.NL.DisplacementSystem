@@ -47,8 +47,8 @@ public class ProcessedCarDaoTest {
 
         processedCarsDao.create(processedCars.get(0));
 
-        when(processedCarsDao.getNotProcessedDataById(1L)).thenReturn(processedCars);
-        List<ProcessedCar> foundCars = processedCarsDao.getNotProcessedDataById(1L);
+        when(processedCarsDao.getNotProcessedDataById("NLD1")).thenReturn(processedCars);
+        List<ProcessedCar> foundCars = processedCarsDao.getNotProcessedDataById("NLD1");
 
         Assert.assertEquals(1, foundCars.size());
         Assert.assertNotEquals(0, foundCars.size());

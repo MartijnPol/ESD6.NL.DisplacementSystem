@@ -65,7 +65,7 @@ public class CarTrackerServiceTest {
 
         carTracker = new CarTracker();
         carTracker.setTotalRules(3L);
-        this.carTracker.setId(1L);
+        this.carTracker.setId("NLD1");
         carTrackerRules = new ArrayList<>();
         this.carTrackerRule1 =
                 new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true);
@@ -83,8 +83,8 @@ public class CarTrackerServiceTest {
 
     @Test
     public void findById_CarTrackerId_CarTrackerFound() {
-        when(carTrackerService.findById(1L)).thenReturn(carTracker);
-        CarTracker carTrackerFound = carTrackerService.findById(1L);
+        when(carTrackerService.findById("NLD1")).thenReturn(carTracker);
+        CarTracker carTrackerFound = carTrackerService.findById("NLD1");
         assertThat(carTrackerFound, is(carTracker));
     }
 
@@ -96,8 +96,8 @@ public class CarTrackerServiceTest {
 
     @Test
     public void getRulesWithinPeriod_CarTrackerIdAndStartAndEndDate_CarTrackerRulesFoundWithinPeriod() {
-        when(carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo)).thenReturn(carTracker);
-        CarTracker carTrackerFound = carTrackerService.getRulesWithinPeriod(1L, dateOne, dateTwo);
+        when(carTrackerService.getRulesWithinPeriod("NLD1", dateOne, dateTwo)).thenReturn(carTracker);
+        CarTracker carTrackerFound = carTrackerService.getRulesWithinPeriod("NLD1", dateOne, dateTwo);
         assertThat(carTrackerFound, is(carTracker));
     }
 
@@ -221,13 +221,13 @@ public class CarTrackerServiceTest {
         this.carTrackerRules.add(carTrackerRule1);
         this.carTracker.addRules(carTrackerRules);
         this.carTracker.setTotalRules(1L);
-        this.carTracker.setId(1L);
+        this.carTracker.setId("NLD1");
         this.carTrackerService.create(carTracker);
 
         List<ProcessedCar> processedCars = new ArrayList<>();
 
         when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(1L);
-        when(processedCarsDao.getNotProcessedDataById(Matchers.eq(1L))).thenReturn(processedCars);
+        when(processedCarsDao.getNotProcessedDataById(Matchers.eq("NLD1"))).thenReturn(processedCars);
 
         boolean allCarTrackerChecks = this.carTrackerService.executeAllCarTrackerChecks(carTracker);
 
@@ -240,14 +240,14 @@ public class CarTrackerServiceTest {
         this.carTrackerRules.add(carTrackerRule1);
         this.carTracker.addRules(carTrackerRules);
         this.carTracker.setTotalRules(1L);
-        this.carTracker.setId(1L);
+        this.carTracker.setId("NLD1");
         this.carTrackerService.create(carTracker);
 
         List<ProcessedCar> processedCars = new ArrayList<>();
         processedCars.add(new ProcessedCar());
 
         when(carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker)).thenReturn(1L);
-        when(processedCarsDao.getNotProcessedDataById(Matchers.eq(1L))).thenReturn(processedCars);
+        when(processedCarsDao.getNotProcessedDataById(Matchers.eq("NLD1"))).thenReturn(processedCars);
 
         boolean allCarTrackerChecks = this.carTrackerService.executeAllCarTrackerChecks(carTracker);
 

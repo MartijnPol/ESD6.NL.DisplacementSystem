@@ -105,7 +105,7 @@ public class CarTrackerResource {
      */
     @GET
     @Path("{id}")
-    public Response getCarTrackerData(@PathParam("id") Long id) {
+    public Response getCarTrackerData(@PathParam("id") String id) {
         CarTracker carTracker = carTrackerService.findById(id);
 
         if (carTracker == null) {
