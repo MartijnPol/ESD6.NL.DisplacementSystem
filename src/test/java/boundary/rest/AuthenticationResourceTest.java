@@ -1,6 +1,7 @@
 package boundary.rest;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class AuthenticationResourceTest {
         Setup();
     }
 
+    @Ignore
     @Test
     public void authenticateApplicationTestSuccessful() {
         Map<String, String> credential = new HashMap<>();
@@ -33,6 +35,7 @@ public class AuthenticationResourceTest {
                 .statusCode(200);
     }
 
+    @Ignore
     @Test
     public void authenticateApplicationForbidden() {
         Map<String, String> credential = new HashMap<>();

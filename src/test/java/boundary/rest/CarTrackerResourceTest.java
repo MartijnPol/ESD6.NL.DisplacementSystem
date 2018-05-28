@@ -1,6 +1,7 @@
 package boundary.rest;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static boundary.rest.RestResourceSetup.Setup;
@@ -16,6 +17,7 @@ public class CarTrackerResourceTest {
         Setup();
     }
 
+    @Ignore
     @Test
     public void carTrackers() {
         given().
@@ -28,6 +30,7 @@ public class CarTrackerResourceTest {
                         "[0].CarTrackerId", equalTo(1));
     }
 
+    @Ignore
     @Test
     public void carTrackerByID() {
         given().
@@ -38,7 +41,7 @@ public class CarTrackerResourceTest {
                 body("CarTrackerId", equalTo(1),
                         "CarTrackerRules.size()", equalTo(8));
     }
-
+    @Ignore
     @Test
     public void carTrackerRulesID() {
         given().
