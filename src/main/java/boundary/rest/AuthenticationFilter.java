@@ -24,7 +24,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private static final String AUTHENTICATION_SCHEME = "Bearer";
 
     @Override
-    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+    public void filter(ContainerRequestContext containerRequestContext)  {
         String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
         if (!isTokenBasedAuthentication(authorizationHeader)) {
