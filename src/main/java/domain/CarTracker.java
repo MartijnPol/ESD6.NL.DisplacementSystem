@@ -71,8 +71,6 @@ public class CarTracker implements Serializable {
         Locale location = new Locale.Builder().setLanguage("nl").setRegion("NL").build();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", location);
         String formattedStartDate = dateFormat.format(this.startDate);
-        String formattedEndDate = dateFormat.format(this.endDate);
-
         for (CarTrackerRule carTrackerRule : rules) {
             jsonArrayBuilder.add(carTrackerRule.toJson());
         }
@@ -81,7 +79,6 @@ public class CarTracker implements Serializable {
                 .add("id", this.id)
                 .add("totalRules", this.totalRules)
                 .add("startDate", formattedStartDate)
-                .add("endDate", formattedEndDate)
                 .add("manufacturer", this.manufacturer)
                 .add("CarTrackerRules", jsonArrayBuilder)
                 .build();
