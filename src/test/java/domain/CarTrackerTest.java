@@ -46,7 +46,7 @@ public class CarTrackerTest {
 
         Long expected = firstCarTrackerRule.getId();
 
-        Assert.assertEquals(new Long(2), firstCarTrackerRule.getKmDriven());
+        Assert.assertEquals(new Long(2), firstCarTrackerRule.getMetersDriven());
         Assert.assertEquals(expected, firstCarTrackerRule.getId());
         Assert.assertTrue(firstCarTrackerRule.isDriven());
     }

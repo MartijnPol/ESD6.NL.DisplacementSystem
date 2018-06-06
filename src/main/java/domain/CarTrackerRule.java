@@ -28,7 +28,7 @@ public class CarTrackerRule implements Serializable {
     @JsonIgnore
     private CarTracker carTracker;
 
-    private Long kmDriven;
+    private Long metersDriven;
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -38,18 +38,15 @@ public class CarTrackerRule implements Serializable {
 
     private double lon;
 
-    private boolean driven;
-
     public CarTrackerRule() {
     }
 
-    public CarTrackerRule(CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
+    public CarTrackerRule(CarTracker carTracker, Long metersDriven, Date date, double lat, double lon) {
         this.carTracker = carTracker;
-        this.kmDriven = kmDriven;
+        this.metersDriven = metersDriven;
         this.date = date;
         this.lat = lat;
         this.lon = lon;
-        this.driven = driven;
     }
 
     public JsonObject toJson() {
@@ -58,11 +55,10 @@ public class CarTrackerRule implements Serializable {
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("kmDriven", this.kmDriven)
+                .add("kmDriven", this.metersDriven)
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)
-                .add("driven", driven)
                 .build();
     }
 
@@ -83,12 +79,12 @@ public class CarTrackerRule implements Serializable {
         this.carTracker = carTracker;
     }
 
-    public Long getKmDriven() {
-        return kmDriven;
+    public Long getMetersDriven() {
+        return metersDriven;
     }
 
-    public void setKmDriven(Long kmDriven) {
-        this.kmDriven = kmDriven;
+    public void setMetersDriven(Long kmDriven) {
+        this.metersDriven = kmDriven;
     }
 
     public Date getDate() {
@@ -115,13 +111,6 @@ public class CarTrackerRule implements Serializable {
         this.lon = lon;
     }
 
-    public boolean isDriven() {
-        return driven;
-    }
-
-    public void setDriven(boolean driven) {
-        this.driven = driven;
-    }
     //</editor-fold>
 
     //<editor-fold desc="equals/hashCode">
@@ -135,7 +124,6 @@ public class CarTrackerRule implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
     }
     //</editor-fold>

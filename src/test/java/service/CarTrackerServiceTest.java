@@ -124,12 +124,12 @@ public class CarTrackerServiceTest {
         this.carTrackerRule1.setId(1L);
         this.carTrackerRules.add(this.carTrackerRule1);
         this.carTracker.setRules(this.carTrackerRules);
-        this.carTrackerRule1.setKmDriven(null);
+        this.carTrackerRule1.setMetersDriven(null);
         boolean kmDriven = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
 
         assertSame(false, kmDriven);
 
-        this.carTrackerRule1.setKmDriven(2L);
+        this.carTrackerRule1.setMetersDriven(2L);
         this.carTrackerRule1.setDate(null);
         boolean date = this.carTrackerService.missingRuleValuesCheck(this.carTracker);
 

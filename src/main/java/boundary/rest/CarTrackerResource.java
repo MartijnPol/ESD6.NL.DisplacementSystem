@@ -13,6 +13,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("CarTrackers")
@@ -96,23 +99,26 @@ public class CarTrackerResource {
         return Response.created(id).build();
     }
 
-
     /**
      * Function to add rules to a CarTracker entity.
      * When the parameter carTrackerRule or ID is evaluated null a response status not found is thrown (404).
      * @param id
-     * @param rule
+     * @param lat
+     * @param lon
+     * @param date
+     * @param mdriven
      */
     @POST
     @Path("/AddRule")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addCarTrackerRules(String id , CarTrackerRule rule) {
-        if (id.isEmpty() && rule == null) {
+    public void addCarTrackerRules(String id , double lat , double lon , Date date , Long mdriven ) {
+        if (id.isEmpty() && lat == 0.0 && lon == 0.0 && date == null && mdriven == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-
+        
         CarTracker foundCarTracker = carTrackerService.findById(id);
+        CarTrackerRule rule = new CarTrackerRule(foundCarTracker, mdriven, date, lat , lon);
         foundCarTracker.addRule(rule);
         messageProducer.sendMessage(foundCarTracker);
     }

@@ -175,7 +175,7 @@ public class CarTrackerService {
                         + carTrackerRule.getId() + " " + "isn't equal with count");
                 return false;
             }
-            if (Objects.isNull(carTrackerRule.getKmDriven())) {
+            if (Objects.isNull(carTrackerRule.getMetersDriven())) {
                 System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
                         + carTrackerRule.getId() + " " + "has null at KmDriven");
                 return false;
