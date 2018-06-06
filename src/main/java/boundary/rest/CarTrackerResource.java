@@ -2,6 +2,7 @@ package boundary.rest;
 
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
+import domain.CarTrackerRule;
 import jms.MessageProducer;
 import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
@@ -93,6 +94,27 @@ public class CarTrackerResource {
 
         URI id = URI.create(carTracker.getId().toString());
         return Response.created(id).build();
+    }
+
+
+    /**
+     * Function to add rules to a CarTracker entity.
+     * When the parameter carTrackerRule or ID is evaluated null a response status not found is thrown (404).
+     * @param id
+     * @param rule
+     */
+    @POST
+    @Path("/AddRule")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addCarTrackerRules(String id , CarTrackerRule rule) {
+        if (id.isEmpty() && rule == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        CarTracker foundCarTracker = carTrackerService.findById(id);
+        foundCarTracker.addRule(rule);
+        messageProducer.sendMessage(foundCarTracker);
     }
 
     /**

@@ -62,6 +62,11 @@ public class CarTracker implements Serializable {
         calculateTotalRules();
     }
 
+    public void addRule(CarTrackerRule rule) {
+        this.rules.add(rule);
+        calculateTotalRules();
+    }
+
     private void calculateTotalRules() {
         this.totalRules = (long) rules.size();
     }
