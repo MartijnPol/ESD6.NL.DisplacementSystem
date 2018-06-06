@@ -56,7 +56,7 @@ public class CarTrackerDaoTest {
         CarTracker foundCarTracker = carTrackerDao.getRulesWithinPeriod(carTracker.getId(), dateOne, dateFour);
         assertThat(foundCarTracker, is(carTracker));
 
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914));
         carTracker.setRules(carTrackerRules);
         carTrackerDao.update(carTracker);
 
@@ -74,10 +74,10 @@ public class CarTrackerDaoTest {
         List<CarTracker> foundCarTrackers = carTrackerDao.findAll();
         verify(carTrackerDao, Mockito.times(1)).findAll();
 
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateTwo, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateThree, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateFour, 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateTwo, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateThree, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateFour, 51.560596, 5.091914));
 
         carTracker.setRules(carTrackerRules);
 

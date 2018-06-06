@@ -116,7 +116,6 @@ public class CarTrackerResource {
         if (id.isEmpty() && lat == 0.0 && lon == 0.0 && date == null && mdriven == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        
         CarTracker foundCarTracker = carTrackerService.findById(id);
         CarTrackerRule rule = new CarTrackerRule(foundCarTracker, mdriven, date, lat , lon);
         foundCarTracker.addRule(rule);

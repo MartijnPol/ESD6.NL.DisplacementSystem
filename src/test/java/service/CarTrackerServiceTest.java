@@ -68,11 +68,11 @@ public class CarTrackerServiceTest {
         this.carTracker.setId("NLD1");
         carTrackerRules = new ArrayList<>();
         this.carTrackerRule1 =
-                new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+                new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914);
         this.carTrackerRule2 =
-                new CarTrackerRule(carTracker, 3L, dateTwo, 51.560596, 5.091914, true);
+                new CarTrackerRule(carTracker, 3L, dateTwo, 51.560596, 5.091914);
         this.carTrackerRule3 =
-                new CarTrackerRule(carTracker, 4L, dateThree, 51.560596, 5.091914, true);
+                new CarTrackerRule(carTracker, 4L, dateThree, 51.560596, 5.091914);
     }
 
     @Test

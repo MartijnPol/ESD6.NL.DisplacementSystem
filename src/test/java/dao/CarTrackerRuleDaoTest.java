@@ -41,9 +41,9 @@ public class CarTrackerRuleDaoTest {
         this.carTracker = new CarTracker();
         this.carTracker.setId("NLD1");
 
-        CarTrackerRule carTrackerRule = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+        CarTrackerRule carTrackerRule = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914);
         carTrackerRule.setId(1L);
-        CarTrackerRule carTrackerRule2 = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+        CarTrackerRule carTrackerRule2 = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914);
         carTrackerRule2.setId(2L);
     }
 

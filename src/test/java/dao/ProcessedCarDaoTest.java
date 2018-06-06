@@ -40,7 +40,7 @@ public class ProcessedCarDaoTest {
 
     @Test
     public void getNotProcessedDataById_Id_ListOfNotProcessedCars() {
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914));
         carTracker.setRules(carTrackerRules);
 
         processedCars.add(new ProcessedCar(carTracker, dateOne, false));
