@@ -3,6 +3,7 @@ package boundary.rest;
 import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
+import domain.recievedCarTrackerRule;
 import jms.MessageProducer;
 import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
@@ -102,23 +103,20 @@ public class CarTrackerResource {
     /**
      * Function to add rules to a CarTracker entity.
      * When the parameter carTrackerRule or ID is evaluated null a response status not found is thrown (404).
-     * @param id
-     * @param lat
-     * @param lon
-     * @param date
-     * @param mdriven
+     * @param rule
+     *
      */
     @POST
     @Path("/AddRule")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addCarTrackerRules(String id , double lat , double lon , Date date , Long mdriven ) {
-        if (id.isEmpty() && lat == 0.0 && lon == 0.0 && date == null && mdriven == null) {
+    public void addCarTrackerRules(recievedCarTrackerRule rule ) {
+        if (rule.getId().isEmpty() && rule.getLat() == 0.0 && rule.getLon() == 0.0 && rule.getDate() == null && rule.getMdriven() == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        CarTracker foundCarTracker = carTrackerService.findById(id);
-        CarTrackerRule rule = new CarTrackerRule(foundCarTracker, mdriven, date, lat , lon);
-        foundCarTracker.addRule(rule);
+        CarTracker foundCarTracker = carTrackerService.findById(rule.getId());
+        CarTrackerRule newRule = new CarTrackerRule(foundCarTracker, rule.getMdriven(), rule.getDate(), rule.getLat() , rule.getLon());
+        foundCarTracker.addRule(newRule);
         messageProducer.sendMessage(foundCarTracker);
     }
 
