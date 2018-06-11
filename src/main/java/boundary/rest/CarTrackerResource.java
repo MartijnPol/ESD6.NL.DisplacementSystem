@@ -1,9 +1,6 @@
 package boundary.rest;
 
-import domain.CarTracker;
-import domain.CarTrackerDataQuery;
-import domain.CarTrackerRule;
-import domain.recievedCarTrackerRule;
+import domain.*;
 import jms.MessageProducer;
 import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
@@ -41,7 +38,7 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
-//    @Secured
+    @Secured(AuthorizedApplications.AAS)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
@@ -62,6 +59,7 @@ public class CarTrackerResource {
     @Path("/Create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured(AuthorizedApplications.AAS)
     public Response createCarTracker(CarTracker carTracker) {
         if (carTracker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -83,6 +81,7 @@ public class CarTrackerResource {
      */
     @POST
     @Path("/Update")
+    @Secured(AuthorizedApplications.AAS)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCarTracker(CarTracker carTracker) {
@@ -130,6 +129,7 @@ public class CarTrackerResource {
      */
     @GET
     @Path("{id}")
+    @Secured(AuthorizedApplications.AAS)
     public Response getCarTrackerData(@PathParam("id") String id) {
         CarTracker carTracker = carTrackerService.findById(id);
 
