@@ -7,7 +7,7 @@
                           res-type="javax.sql.DataSource">
         <property name="password" value="root"></property>
         <property name="databaseName" value="DisplacementSystem"></property>
-        <property name="serverName" value="35.195.122.75"></property>
+        <property name="serverName" value="192.168.25.122"></property>
         <property name="user" value="root"></property>
         <property name="portNumber" value="3306"></property>
     </jdbc-connection-pool>
