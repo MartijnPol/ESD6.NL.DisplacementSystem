@@ -13,11 +13,8 @@
     </jdbc-connection-pool>
     <jdbc-resource pool-name="CarTackerPU" jndi-name="jdbc/DisplacementSystem" enabled="true"></jdbc-resource>
 
-    <admin-object-resource enabled="true" jndi-name="jms/GlassFishQueue"
-                           res-type="javax.jms.Queue"  res-adapter="jmsra">
-        <property name="Name" value="GlassFishQueue"/>
+    <connector-resource pool-name="jms/GlassFishConnectionFactory-Connection-Pool" jndi-name="jms/GlassFishConnectionFactory"></connector-resource>
+    <admin-object-resource res-adapter="jmsra" description="Queueueueueuueuee" res-type="javax.jms.Queue" jndi-name="jms/GlassFishQueue">
+        <property name="Name" value="GlassFishQueue"></property>
     </admin-object-resource>
-    <connector-connection-pool name="jms/GlassFishConnectionFactory"
-                               connection-definition-name="javax.jms.QueueConnectionFactory"
-                               resource-adapter-name="jmsra"/>
 </resources>
