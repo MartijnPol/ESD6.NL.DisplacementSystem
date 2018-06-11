@@ -64,7 +64,7 @@ pipeline{
                 branch 'master'
             }
             steps{
-                sh 'mvn clean package -B'
+					sh 'sshpass -p \'student\' ssh -o StrictHostKeyChecking=no student@192.168.25.122 "./updateDs.sh"'
             }
         }
         stage('Deploy release'){
@@ -72,7 +72,7 @@ pipeline{
                 branch 'release'
             }
             steps{
-                sh 'mvn clean package -B'
+					sh 'sshpass -p \'student\' ssh -o StrictHostKeyChecking=no student@192.168.25.122 "./updateDs.sh"'
             }
         }
     }
