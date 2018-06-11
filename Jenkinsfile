@@ -24,6 +24,7 @@ pipeline{
                 anyOf{
                     branch 'master'
                     branch 'release'
+                    branch 'DockerTest'
                 }
             }
             steps{
@@ -40,6 +41,8 @@ pipeline{
                 anyOf{
                     branch 'master'
                     branch 'release'
+                    branch 'DockerTest'
+
                 }
             }
 			steps{
