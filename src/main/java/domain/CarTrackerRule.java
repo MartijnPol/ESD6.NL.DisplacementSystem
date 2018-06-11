@@ -33,7 +33,7 @@ public class CarTrackerRule implements Serializable {
     private Long metersDriven;
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss", timezone = "GMT")
     private Date date;
 
     private double lat;
@@ -65,7 +65,7 @@ public class CarTrackerRule implements Serializable {
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)
-                .add("roadType", this.roadType)
+                .add("roadType", this.roadType == null ? "O" : this.roadType)
                 .build();
     }
 
