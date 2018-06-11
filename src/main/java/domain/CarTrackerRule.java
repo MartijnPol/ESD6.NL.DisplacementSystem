@@ -55,7 +55,7 @@ public class CarTrackerRule implements Serializable {
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("kmDriven", this.metersDriven)
+                .add("metersDriven", this.metersDriven)
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)
