@@ -36,11 +36,11 @@ public class StartUp {
 
     @PostConstruct
     public void initData() {
-        CarTracker carTracker = new CarTracker();
-        carTracker.setId("NLD1");
-        carTracker.setStartDate(new Date());
-        carTracker.setManufacturer("ASUS");
-        carTracker.setEnabled(true);
+//        CarTracker carTracker = new CarTracker();
+//        carTracker.setId("NLD1");
+//        carTracker.setStartDate(new Date());
+//        carTracker.setManufacturer("ASUS");
+//        carTracker.setEnabled(true);
 
 //        List<CarTrackerRule> carTrackerRules = new ArrayList<CarTrackerRule>();
 //        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime(), 51.560596, 5.091914));
@@ -53,16 +53,16 @@ public class StartUp {
 //            rule.setCarTracker(carTracker);
 //        }
 //        carTracker.setTotalRules((long) carTrackerRules.size());
-        carTrackerService.create(carTracker);
-//
+//        carTrackerService.create(carTracker);
+
 //        try {
 //            messageProducer.sendMessage(jsonReader.readJsonFiles());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 
-        Credentials credentials = new Credentials("admin");
-        credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
-        authenticationService.createCredentials(credentials);
+//        Credentials credentials = new Credentials("admin");
+//        credentials.setToken("fmrh7fpci1m6t53618b94iqr0d");
+//        authenticationService.createCredentials(credentials);
     }
 }
