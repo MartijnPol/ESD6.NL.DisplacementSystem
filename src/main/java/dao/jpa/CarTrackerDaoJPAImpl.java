@@ -6,6 +6,7 @@ import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +15,17 @@ import java.util.List;
 @JPA
 public class CarTrackerDaoJPAImpl extends GenericDaoJPAImpl<CarTracker> implements CarTrackerDao {
 
+    @Override
+    public CarTracker findById(String id) {
+        TypedQuery<CarTracker> query = getEntityManager().createNamedQuery("carTracker.findById", CarTracker.class)
+                .setParameter("id", id);
+
+        return oneResult(query);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public CarTracker getRulesWithinPeriod(Long trackerId, Date startDate, Date endDate) {
+    public CarTracker getRulesWithinPeriod(String trackerId, Date startDate, Date endDate) {
         List rules = this.entityManager.createNamedQuery("carTracker.findAllMovementsWithinPeriodByTrackerId")
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)

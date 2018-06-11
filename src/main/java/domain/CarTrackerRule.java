@@ -16,7 +16,9 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "carTrackerRule.getHighestRuleIdFromCarTrackerRules",
-                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker")
+                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker"),
+        @NamedQuery(name = "carTrackerRule.getRulesByIDMonthAndYear",
+                query = "SELECT c FROM CarTrackerRule c where c.carTracker.id = :carTrackerId and function('MONTH', c.date) = :month and function('YEAR', c.date) = :year")
 })
 public class CarTrackerRule implements Serializable {
 
@@ -28,28 +30,29 @@ public class CarTrackerRule implements Serializable {
     @JsonIgnore
     private CarTracker carTracker;
 
-    private Long kmDriven;
+    private Long metersDriven;
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss", timezone = "GMT")
     private Date date;
 
     private double lat;
 
     private double lon;
 
-    private boolean driven;
+    private String roadType;
 
     public CarTrackerRule() {
+        this.roadType = "O";
     }
 
-    public CarTrackerRule(CarTracker carTracker, Long kmDriven, Date date, double lat, double lon, boolean driven) {
+    public CarTrackerRule(CarTracker carTracker, Long metersDriven, Date date, double lat, double lon) {
+        this();
         this.carTracker = carTracker;
-        this.kmDriven = kmDriven;
+        this.metersDriven = metersDriven;
         this.date = date;
         this.lat = lat;
         this.lon = lon;
-        this.driven = driven;
     }
 
     public JsonObject toJson() {
@@ -58,11 +61,11 @@ public class CarTrackerRule implements Serializable {
         String date = dateFormat.format(this.date);
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("kmDriven", this.kmDriven)
+                .add("metersDriven", this.metersDriven)
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)
-                .add("driven", driven)
+                .add("roadType", this.roadType == null ? "O" : this.roadType)
                 .build();
     }
 
@@ -83,12 +86,12 @@ public class CarTrackerRule implements Serializable {
         this.carTracker = carTracker;
     }
 
-    public Long getKmDriven() {
-        return kmDriven;
+    public Long getMetersDriven() {
+        return metersDriven;
     }
 
-    public void setKmDriven(Long kmDriven) {
-        this.kmDriven = kmDriven;
+    public void setMetersDriven(Long kmDriven) {
+        this.metersDriven = kmDriven;
     }
 
     public Date getDate() {
@@ -115,13 +118,14 @@ public class CarTrackerRule implements Serializable {
         this.lon = lon;
     }
 
-    public boolean isDriven() {
-        return driven;
+    public String getRoadType() {
+        return roadType;
     }
 
-    public void setDriven(boolean driven) {
-        this.driven = driven;
+    public void setRoadType(String roadType) {
+        this.roadType = roadType;
     }
+
     //</editor-fold>
 
     //<editor-fold desc="equals/hashCode">
@@ -135,7 +139,6 @@ public class CarTrackerRule implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
     }
     //</editor-fold>

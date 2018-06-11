@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ProcessedCarsDao extends GenericDao<ProcessedCar> {
 
-    List<ProcessedCar> getNotProcessedDataById(long id);
+    List<ProcessedCar> getNotProcessedDataById(String id);
 }

@@ -39,11 +39,11 @@ public class CarTrackerRuleDaoTest {
         Date dateOne = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
 
         this.carTracker = new CarTracker();
-        this.carTracker.setId(1L);
+        this.carTracker.setId("NLD1");
 
-        CarTrackerRule carTrackerRule = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+        CarTrackerRule carTrackerRule = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914);
         carTrackerRule.setId(1L);
-        CarTrackerRule carTrackerRule2 = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914, true);
+        CarTrackerRule carTrackerRule2 = new CarTrackerRule(this.carTracker, 2L, dateOne, 51.560596, 5.091914);
         carTrackerRule2.setId(2L);
     }
 

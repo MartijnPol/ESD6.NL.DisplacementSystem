@@ -12,7 +12,7 @@ import java.util.List;
 public class ProcessedCarsDaoJPAImpl extends GenericDaoJPAImpl<ProcessedCar> implements ProcessedCarsDao {
 
     @Override
-    public List<ProcessedCar> getNotProcessedDataById(long id) {
+    public List<ProcessedCar> getNotProcessedDataById(String id) {
         return getEntityManager().createNamedQuery("processedCars.getNotProcessedDataById", ProcessedCar.class)
                 .setParameter("id", id)
                 .getResultList();

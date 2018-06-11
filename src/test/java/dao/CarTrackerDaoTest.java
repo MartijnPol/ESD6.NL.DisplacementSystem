@@ -38,7 +38,7 @@ public class CarTrackerDaoTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         carTracker = new CarTracker();
-        carTracker.setId(1L);
+        carTracker.setId("NLD1");
         carTrackerRules = new ArrayList<>();
 
         dateOne = new GregorianCalendar(2017, Calendar.DECEMBER, 1).getTime();
@@ -52,15 +52,15 @@ public class CarTrackerDaoTest {
         carTrackerDao.create(carTracker);
         verify(carTrackerDao, Mockito.times(1)).create(carTracker);
 
-        when(carTrackerDao.getRulesWithinPeriod(1L, dateOne, dateFour)).thenReturn(carTracker);
+        when(carTrackerDao.getRulesWithinPeriod("NLD1", dateOne, dateFour)).thenReturn(carTracker);
         CarTracker foundCarTracker = carTrackerDao.getRulesWithinPeriod(carTracker.getId(), dateOne, dateFour);
         assertThat(foundCarTracker, is(carTracker));
 
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914));
         carTracker.setRules(carTrackerRules);
         carTrackerDao.update(carTracker);
 
-        when(carTrackerDao.getRulesWithinPeriod(1L, dateOne, dateFour)).thenReturn(carTracker);
+        when(carTrackerDao.getRulesWithinPeriod("NLD1", dateOne, dateFour)).thenReturn(carTracker);
         CarTracker foundCarTracker2 = carTrackerDao.getRulesWithinPeriod(carTracker.getId(), dateOne, dateFour);
 
         assertEquals(dateOne, foundCarTracker2.getRules().get(0).getDate());
@@ -74,10 +74,10 @@ public class CarTrackerDaoTest {
         List<CarTracker> foundCarTrackers = carTrackerDao.findAll();
         verify(carTrackerDao, Mockito.times(1)).findAll();
 
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateTwo, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateThree, 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateFour, 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateOne, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateTwo, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateThree, 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, dateFour, 51.560596, 5.091914));
 
         carTracker.setRules(carTrackerRules);
 

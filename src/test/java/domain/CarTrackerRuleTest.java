@@ -20,11 +20,11 @@ public class CarTrackerRuleTest {
 
     @Test
     public void createCarTrackerRule() {
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());
-        carTracker.setId(1L);
+        carTracker.setId("NLD1");
 
         Assert.assertEquals(1, carTracker.getRules().size());
         Assert.assertNotEquals(2, carTracker.getRules().size());

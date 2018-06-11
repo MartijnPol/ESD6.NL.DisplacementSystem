@@ -1,5 +1,6 @@
 package jms;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import domain.CarTracker;
 import service.CarTrackerService;
 
@@ -11,6 +12,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 
 @MessageDriven(mappedName = "jms/GlassFishQueue", activationConfig = {
@@ -38,7 +40,13 @@ public class MessageBean implements MessageListener {
             this.i++;
             System.out.println(i + " " + "TEST" + " " + carTracker.toString());
             long startTime = Instant.now().getEpochSecond();
-            this.cartrackerService.processCarTracker(carTracker);
+            try {
+                this.cartrackerService.processCarTracker(carTracker);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
             long endTime = Instant.now().getEpochSecond();
 
             long duration = (endTime - startTime);

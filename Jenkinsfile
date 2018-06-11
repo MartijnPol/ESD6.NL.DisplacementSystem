@@ -24,6 +24,7 @@ pipeline{
                 anyOf{
                     branch 'master'
                     branch 'release'
+                    branch 'DockerTest'
                 }
             }
             steps{
@@ -40,6 +41,8 @@ pipeline{
                 anyOf{
                     branch 'master'
                     branch 'release'
+                    branch 'DockerTest'
+
                 }
             }
 			steps{
@@ -51,6 +54,7 @@ pipeline{
 		}
         stage('Test sonarqube'){
             steps{
+                sh 'mvn clean test -B'
                 sh 'mvn sonar:sonar -Dsonar.host.url=http://192.168.25.126:9000 -Dsonar.login=74881713522900d0ec5dc5a0ad9e303480b307a8'
 
             }
@@ -60,7 +64,7 @@ pipeline{
                 branch 'master'
             }
             steps{
-                sh 'mvn clean package -B'
+					sh 'sshpass -p \'student\' ssh -o StrictHostKeyChecking=no student@192.168.25.122 "./updateDs.sh"'
             }
         }
         stage('Deploy release'){
@@ -68,7 +72,7 @@ pipeline{
                 branch 'release'
             }
             steps{
-                sh 'mvn clean package -B'
+					sh 'sshpass -p \'student\' ssh -o StrictHostKeyChecking=no student@192.168.25.122 "./updateDs.sh"'
             }
         }
     }

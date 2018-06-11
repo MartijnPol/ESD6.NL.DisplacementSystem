@@ -6,6 +6,7 @@ import domain.CarTracker;
 import domain.CarTrackerRule;
 
 import javax.ejb.Stateless;
+import java.util.List;
 
 /**
  * @author Thom van de Pas on 22-3-2018
@@ -19,5 +20,14 @@ public class CarTrackerRuleJPAImpl extends GenericDaoJPAImpl<CarTrackerRule> imp
         return getEntityManager().createNamedQuery("carTrackerRule.getHighestRuleIdFromCarTrackerRules", Long.class)
                 .setParameter("carTracker", carTracker)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<CarTrackerRule> getRulesByIDMonthAndYear(String id, int month, int year) {
+        return getEntityManager().createNamedQuery("carTrackerRule.getRulesByIDMonthAndYear")
+                .setParameter("carTrackerId", id)
+                .setParameter("month", month)
+                .setParameter("year", year)
+                .getResultList();
     }
 }

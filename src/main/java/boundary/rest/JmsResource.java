@@ -9,10 +9,8 @@ import service.CarTrackerService;
 import service.JsonReader;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class JmsResource {
 
     @Path("{id}")
     @GET
-    public String startJMS(@PathParam("id") Long id) {
+    public String startJMS(@PathParam("id") String id) {
         CarTracker carTracker = carTrackerService.findById(id);
         messageProducer.sendMessage(carTracker);
 
@@ -54,13 +52,13 @@ public class JmsResource {
     @Path("/TestCartracker")
     public String TestCarTracker() {
 
-        long id = 1;
+        String id = "NLD1";
         CarTracker carTrackerTest = carTrackerService.findById(id);
         System.out.println(carTrackerTest.toString());
         List<CarTrackerRule> carTrackerRulesTest = new ArrayList<>();
-        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 5L, new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime(), 55.560596, 6.091914, true));
-        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 6L, new GregorianCalendar(2018, Calendar.FEBRUARY, 2).getTime(), 53.523677, 7.064195, true));
-        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 8L, new GregorianCalendar(2018, Calendar.OCTOBER, 3).getTime(), 52.523677, 8.064195, true));
+        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 5L, new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime(), 55.560596, 6.091914));
+        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 6L, new GregorianCalendar(2018, Calendar.FEBRUARY, 2).getTime(), 53.523677, 7.064195));
+        carTrackerRulesTest.add(new CarTrackerRule(carTrackerTest, 8L, new GregorianCalendar(2018, Calendar.OCTOBER, 3).getTime(), 52.523677, 8.064195));
 
         carTrackerTest.addRules(carTrackerRulesTest);
         for (CarTrackerRule rule : carTrackerRulesTest) {
@@ -87,4 +85,5 @@ public class JmsResource {
 
         return "Test cartracker json ingevoerd";
     }
+
 }

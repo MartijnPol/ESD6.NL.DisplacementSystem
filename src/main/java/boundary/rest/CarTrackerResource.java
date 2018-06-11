@@ -1,7 +1,6 @@
 package boundary.rest;
 
-import domain.CarTracker;
-import domain.CarTrackerDataQuery;
+import domain.*;
 import jms.MessageProducer;
 import org.apache.commons.collections4.CollectionUtils;
 import service.CarTrackerService;
@@ -12,6 +11,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("CarTrackers")
@@ -36,7 +38,7 @@ public class CarTrackerResource {
      * @return all available CarTrackerData stored in the database
      */
     @GET
-//    @Secured
+    @Secured(AuthorizedApplications.AAS)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCarTracker() {
         List<CarTracker> carTrackers = carTrackerService.getCarTrackers();
@@ -57,6 +59,7 @@ public class CarTrackerResource {
     @Path("/Create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured(AuthorizedApplications.AAS)
     public Response createCarTracker(CarTracker carTracker) {
         if (carTracker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -78,6 +81,7 @@ public class CarTrackerResource {
      */
     @POST
     @Path("/Update")
+    @Secured(AuthorizedApplications.AAS)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCarTracker(CarTracker carTracker) {
@@ -96,6 +100,26 @@ public class CarTrackerResource {
     }
 
     /**
+     * Function to add rules to a CarTracker entity.
+     * When the parameter carTrackerRule or ID is evaluated null a response status not found is thrown (404).
+     * @param rule
+     *
+     */
+    @POST
+    @Path("/AddRule")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addCarTrackerRules(recievedCarTrackerRule rule ) {
+        if (rule.getId().isEmpty() && rule.getLat() == 0.0 && rule.getLon() == 0.0 && rule.getDate() == null && rule.getMdriven() == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        CarTracker foundCarTracker = carTrackerService.findById(rule.getId());
+        CarTrackerRule newRule = new CarTrackerRule(foundCarTracker, rule.getMdriven(), rule.getDate(), rule.getLat() , rule.getLon());
+        foundCarTracker.addRule(newRule);
+        messageProducer.sendMessage(foundCarTracker);
+    }
+
+    /**
      * Function to get CarTrackerData according to a given TrackerId
      * The database is searched for a CarTracker that matches the provided id.
      * When the search return empty a response status not found is thrown (404).
@@ -105,7 +129,8 @@ public class CarTrackerResource {
      */
     @GET
     @Path("{id}")
-    public Response getCarTrackerData(@PathParam("id") Long id) {
+    @Secured(AuthorizedApplications.AAS)
+    public Response getCarTrackerData(@PathParam("id") String id) {
         CarTracker carTracker = carTrackerService.findById(id);
 
         if (carTracker == null) {

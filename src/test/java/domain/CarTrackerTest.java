@@ -20,8 +20,8 @@ public class CarTrackerTest {
 
     @Test
     public void createCarTracker() {
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
-        carTrackerRules.add(new CarTrackerRule(carTracker, 3L, new Date(), 51.523677, 5.064195, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 3L, new Date(), 51.523677, 5.064195));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());
@@ -33,7 +33,7 @@ public class CarTrackerTest {
 
     @Test
     public void getCarTrackerRules() {
-        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914, true));
+        carTrackerRules.add(new CarTrackerRule(carTracker, 2L, new Date(), 51.560596, 5.091914));
 
         carTracker.setRules(carTrackerRules);
         carTracker.setTotalRules((long) carTrackerRules.size());
@@ -46,8 +46,7 @@ public class CarTrackerTest {
 
         Long expected = firstCarTrackerRule.getId();
 
-        Assert.assertEquals(new Long(2), firstCarTrackerRule.getKmDriven());
+        Assert.assertEquals(new Long(2), firstCarTrackerRule.getMetersDriven());
         Assert.assertEquals(expected, firstCarTrackerRule.getId());
-        Assert.assertTrue(firstCarTrackerRule.isDriven());
     }
 }
