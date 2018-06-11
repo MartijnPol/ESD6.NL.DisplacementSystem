@@ -7,9 +7,17 @@
                           res-type="javax.sql.DataSource">
         <property name="password" value="root"></property>
         <property name="databaseName" value="DisplacementSystem"></property>
-        <property name="serverName" value="35.195.122.75"></property>
+        <property name="serverName" value="192.168.25.122"></property>
         <property name="user" value="root"></property>
         <property name="portNumber" value="3306"></property>
     </jdbc-connection-pool>
     <jdbc-resource pool-name="CarTackerPU" jndi-name="jdbc/DisplacementSystem" enabled="true"></jdbc-resource>
+
+    <admin-object-resource enabled="true" jndi-name="jms/GlassFishQueue"
+                           res-type="javax.jms.Queue"  res-adapter="jmsra">
+        <property name="Name" value="GlassFishQueue"/>
+    </admin-object-resource>
+    <connector-connection-pool name="jms/GlassFishConnectionFactory"
+                               connection-definition-name="javax.jms.QueueConnectionFactory"
+                               resource-adapter-name="jmsra"/>
 </resources>
