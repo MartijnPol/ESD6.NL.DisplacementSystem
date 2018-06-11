@@ -1,5 +1,7 @@
 package service;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import dao.CarTrackerDao;
 import dao.CarTrackerRuleDao;
 import dao.JPA;
@@ -8,10 +10,15 @@ import domain.CarTracker;
 import domain.CarTrackerDataQuery;
 import domain.CarTrackerRule;
 import domain.ProcessedCar;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import util.StringHelper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +114,94 @@ public class CarTrackerService {
         return jsonObjects;
     }
 
+    //<editor-fold desc="Google Road API">
+
+    /**
+     * Retrieve places from the Google API.
+     * Results are returned in a JSONArray, that later could be used for determining roads.
+     * Latitude longitude path should be correctly formatted for example -35.27801,149.12958|-35.28032,149.12907
+     * When the latitude longitude path is null or empty an empty JSONArray is returned.
+     *
+     * @param latLonPath
+     * @return JSONArray containing places or an empty JSONArray when the path is null or empty.
+     * @throws UnirestException When something goes wrong when requesting the data.
+     * @throws UnsupportedEncodingException When something goes wrong during encoding the URL.
+     */
+    public JSONArray getPlacesForLatLonPath(String latLonPath) throws UnirestException, UnsupportedEncodingException {
+        if (!StringHelper.isEmpty(latLonPath)) {
+            String encodedURL = URLEncoder.encode(latLonPath, "UTF-8");
+            String url = "https://roads.googleapis.com/v1/snapToRoads?path=" + encodedURL + "&interpolate=true&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
+
+            JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
+            return jsonResponseObject.getJSONArray("snappedPoints");
+        }
+
+        return new JSONArray();
+    }
+
+    /**
+     * Retrieve road names from the Google API.
+     * Results are returned in a list, that later could be used for calculations purposes.
+     * When there are no places available an empty list is returned
+     *
+     * @param placesForLatLonPath Array containing all places.
+     * @return List of all road names when there are no places available an empty list is returned
+     * @throws UnsupportedEncodingException When something goes wrong during encoding the URL.
+     * @throws UnirestException When something goes wrong when requesting the data.
+     */
+    public List<String> getPlacesByLatAndLon(JSONArray placesForLatLonPath) throws UnsupportedEncodingException, UnirestException {
+        List<String> roadNames = new ArrayList<>();
+
+        for (int i = 0; i < placesForLatLonPath.length(); i++) {
+            JSONObject placeJSONObject = placesForLatLonPath.getJSONObject(i);
+            String placeId = placeJSONObject.getString("placeId");
+
+            String encodedURL = URLEncoder.encode(placeId, "UTF-8");
+            String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + encodedURL + "&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
+
+            JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
+            String roadType = jsonResponseObject.getJSONArray("result").getJSONArray(0).getJSONArray(0).getString(1);
+
+            if(!roadType.equals("A") && !roadType.equals("N")) {
+                roadNames.add("O");
+            } else {
+                roadNames.add(roadType);
+            }
+        }
+
+        return roadNames;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="All the CarTracker checks">
+
+    /**
+     * Format latitude longitude values so they can be used by the Google Roads API.
+     * For example -35.27801,149.12958|-35.28032,149.12907
+     * When no rules are available an empty string will be returned.
+     *
+     * @param rules CarTrackerRules list containing the necessary
+     * @return Formatted lat and lon path when no rules are available empty string is returned
+     */
+    public String getLatLonPath(List<CarTrackerRule> rules) {
+        if (!rules.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (CarTrackerRule carTrackerRule : rules) {
+                double lat = carTrackerRule.getLat();
+                double lon = carTrackerRule.getLon();
+
+                stringBuilder.append(lat + "," + lon + "|");
+            }
+
+            stringBuilder.setLength(stringBuilder.length() - 1);
+
+            return stringBuilder.toString();
+        }
+
+        return "";
+    }
 
     /**
      * Method to update a CarTracker after the checks are run.
@@ -115,19 +209,27 @@ public class CarTrackerService {
      *
      * @param carTracker is the CarTracker that will be updated.
      */
-    public void processCarTracker(CarTracker carTracker) {
+    public void processCarTracker(CarTracker carTracker) throws UnsupportedEncodingException, UnirestException {
         if (carTracker != null) {
 
             System.out.println("Processing CarTracker" + carTracker.getId());
-            CarTracker foundCarTracker = this.findById("NLD1");
+            CarTracker foundCarTracker = this.findById(carTracker.getId());
 
             boolean safe = this.executeAllCarTrackerChecks(carTracker);
 
             if (safe) {
                 if (foundCarTracker != null) {
                     foundCarTracker.addRules(carTracker.getRules());
-                    for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
-                        carTrackerRule.setCarTracker(foundCarTracker);
+
+                    String latLonPath = getLatLonPath(carTracker.getRules());
+                    JSONArray placesForLatLonPath = getPlacesForLatLonPath(latLonPath);
+                    List<String> placesByLatAndLon = getPlacesByLatAndLon(placesForLatLonPath);
+
+                    for (int i = 0; i < carTracker.getRules().size(); i++) {
+                        String roadType = placesByLatAndLon.get(i);
+
+                        carTracker.getRules().get(i).setRoadType(roadType);
+                        carTracker.getRules().get(i).setCarTracker(foundCarTracker);
                     }
 
                     this.update(foundCarTracker);

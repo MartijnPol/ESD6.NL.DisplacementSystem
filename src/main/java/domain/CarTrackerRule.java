@@ -16,7 +16,9 @@ import java.util.Objects;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "carTrackerRule.getHighestRuleIdFromCarTrackerRules",
-                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker")
+                query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker"),
+        @NamedQuery(name = "carTrackerRule.getRulesByIDMonthAndYear",
+                query = "SELECT c FROM CarTrackerRule c where c.carTracker.id = :carTrackerId and function('MONTH', c.date) = :month and function('YEAR', c.date) = :year")
 })
 public class CarTrackerRule implements Serializable {
 
@@ -31,17 +33,21 @@ public class CarTrackerRule implements Serializable {
     private Long metersDriven;
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss", timezone = "GMT")
     private Date date;
 
     private double lat;
 
     private double lon;
 
+    private String roadType;
+
     public CarTrackerRule() {
+        this.roadType = "O";
     }
 
     public CarTrackerRule(CarTracker carTracker, Long metersDriven, Date date, double lat, double lon) {
+        this();
         this.carTracker = carTracker;
         this.metersDriven = metersDriven;
         this.date = date;
@@ -59,6 +65,7 @@ public class CarTrackerRule implements Serializable {
                 .add("date", date)
                 .add("lat", this.lat)
                 .add("lon", this.lon)
+                .add("roadType", this.roadType == null ? "O" : this.roadType)
                 .build();
     }
 
@@ -109,6 +116,14 @@ public class CarTrackerRule implements Serializable {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    public String getRoadType() {
+        return roadType;
+    }
+
+    public void setRoadType(String roadType) {
+        this.roadType = roadType;
     }
 
     //</editor-fold>

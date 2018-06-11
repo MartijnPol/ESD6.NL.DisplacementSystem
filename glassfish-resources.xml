@@ -3,13 +3,19 @@
         "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
         "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-<jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" name="CarTackerPU"
-                      res-type="javax.sql.DataSource">
-    <property name="password" value="root"></property>
-    <property name="databaseName" value="DisplacementSystem"></property>
-    <property name="serverName" value="192.168.25.122"></property>
-    <property name="user" value="root"></property>
-    <property name="portNumber" value="3306"></property>
-</jdbc-connection-pool>
-<jdbc-resource pool-name="CarTackerPU" jndi-name="jdbc/DisplacementSystem" enabled="true"></jdbc-resource>
+    <jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" name="CarTackerPU"
+                          res-type="javax.sql.DataSource">
+        <property name="password" value="root"></property>
+        <property name="databaseName" value="DisplacementSystem"></property>
+        <property name="serverName" value="192.168.25.122"></property>
+        <property name="user" value="root"></property>
+        <property name="portNumber" value="3306"></property>
+    </jdbc-connection-pool>
+    <jdbc-resource pool-name="CarTackerPU" jndi-name="jdbc/DisplacementSystem" enabled="true"></jdbc-resource>
+
+    <connector-connection-pool max-pool-size="250" resource-adapter-name="jmsra" steady-pool-size="1" name="jms/GlassFishConnectionFactory-Connection-Pool"  connection-definition-name="javax.jms.ConnectionFactory"></connector-connection-pool>
+    <connector-resource pool-name="jms/GlassFishConnectionFactory-Connection-Pool" jndi-name="jms/GlassFishConnectionFactory"></connector-resource>
+    <admin-object-resource res-adapter="jmsra"  res-type="javax.jms.Queue" jndi-name="jms/GlassFishQueue">
+        <property name="Name" value="GlassFishQueue"></property>
+    </admin-object-resource>
 </resources>
