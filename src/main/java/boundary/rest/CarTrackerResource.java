@@ -11,9 +11,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("CarTrackers")
@@ -109,7 +106,7 @@ public class CarTrackerResource {
     @Path("/AddRule")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addCarTrackerRules(recievedCarTrackerRule rule ) {
+    public void addCarTrackerRules(ReceivedCarTrackerRule rule ) {
         if (rule.getId().isEmpty() && rule.getLat() == 0.0 && rule.getLon() == 0.0 && rule.getDate() == null && rule.getMdriven() == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
