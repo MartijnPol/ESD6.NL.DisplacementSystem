@@ -12,6 +12,7 @@ import domain.CarTrackerRule;
 import domain.ProcessedCar;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.HttpHelper;
 import util.StringHelper;
 
 import javax.ejb.Stateless;
@@ -38,6 +39,8 @@ public class CarTrackerService {
     @Inject
     @JPA
     public ProcessedCarsDao processedCarsDao;
+
+
 
     /**
      * Empty constructor
@@ -132,6 +135,8 @@ public class CarTrackerService {
             String encodedURL = URLEncoder.encode(latLonPath, "UTF-8");
             String url = "https://roads.googleapis.com/v1/snapToRoads?path=" + encodedURL + "&interpolate=true&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
 
+            String test = HttpHelper.get(url);
+            System.out.println("TEST----" + test);
             JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
             return jsonResponseObject.getJSONArray("snappedPoints");
         }

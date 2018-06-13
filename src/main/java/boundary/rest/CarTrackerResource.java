@@ -78,7 +78,7 @@ public class CarTrackerResource {
      */
     @POST
     @Path("/Update")
-    @Secured(AuthorizedApplications.AAS)
+//    @Secured(AuthorizedApplications.AAS)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCarTracker(CarTracker carTracker) {
