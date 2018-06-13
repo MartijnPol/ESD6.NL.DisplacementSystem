@@ -1,7 +1,10 @@
 package service;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import dao.CarTrackerDao;
 import dao.CarTrackerRuleDao;
 import dao.JPA;
@@ -133,12 +136,15 @@ public class CarTrackerService {
     public JSONArray getPlacesForLatLonPath(String latLonPath) throws UnirestException, UnsupportedEncodingException {
         if (!StringHelper.isEmpty(latLonPath)) {
             String encodedURL = URLEncoder.encode(latLonPath, "UTF-8");
-            String url = "https://roads.googleapis.com/v1/snapToRoads?path=" + encodedURL + "&interpolate=true&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
 
-            String test = HttpHelper.get(url);
-            System.out.println("TEST----" + test);
-            JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
-            return jsonResponseObject.getJSONArray("snappedPoints");
+            String herokuUrl = "http://viezehack-js.herokuapp.com/hack/roads?path=" + encodedURL;
+            GetRequest getRequest = Unirest.get(herokuUrl);
+            HttpResponse<JsonNode> jsonNodeHttpResponse = getRequest.asJson();
+            JSONObject object = jsonNodeHttpResponse.getBody().getObject();
+
+            JSONObject jsonResponseObject = Unirest.get(herokuUrl).asJson().getBody().getObject();
+//            return jsonResponseObject.getJSONArray("snappedPoints");
+            return object.getJSONArray("snappedPoints");
         }
 
         return new JSONArray();
@@ -162,11 +168,10 @@ public class CarTrackerService {
             String placeId = placeJSONObject.getString("placeId");
 
             String encodedURL = URLEncoder.encode(placeId, "UTF-8");
-            String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + encodedURL + "&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
+            String url = "http://viezehack-js.herokuapp.com/hack/places?id=" + encodedURL;
 
             JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
-            String roadType = jsonResponseObject.getJSONArray("result").getJSONArray(0).getJSONArray(0).getString(1);
-
+            String roadType = jsonResponseObject.getJSONObject("result").getJSONArray("address_components").getJSONObject(0).getString("short_name").substring(0,1);
             if(!roadType.equals("A") && !roadType.equals("N")) {
                 roadNames.add("O");
             } else {
@@ -230,7 +235,7 @@ public class CarTrackerService {
                     JSONArray placesForLatLonPath = getPlacesForLatLonPath(latLonPath);
                     List<String> placesByLatAndLon = getPlacesByLatAndLon(placesForLatLonPath);
 
-                    for (int i = 0; i < carTracker.getRules().size(); i++) {
+                    for (int i = 0; i <= carTracker.getRules().size(); i++) {
                         String roadType = placesByLatAndLon.get(i);
 
                         carTracker.getRules().get(i).setRoadType(roadType);
@@ -258,12 +263,12 @@ public class CarTrackerService {
     public boolean executeAllCarTrackerChecks(CarTracker carTracker) {
         System.out.println("Running checks");
 
-        boolean idCheck = this.idCheck(carTracker);
+//        boolean idCheck = this.idCheck(carTracker);
         boolean sizeCheck = this.sizeCheck(carTracker);
         boolean missingRuleValuesCheck = this.missingRuleValuesCheck(carTracker);
         boolean storedDataCheck = this.storedDataCheck(carTracker.getId());
 
-        return idCheck && sizeCheck && missingRuleValuesCheck && storedDataCheck;
+        return sizeCheck && missingRuleValuesCheck && storedDataCheck;
 
     }
 
@@ -275,13 +280,13 @@ public class CarTrackerService {
      */
     public boolean missingRuleValuesCheck(CarTracker carTracker) {
 
-        Long i = carTracker.getRules().get(0).getId();
+//        Long i = carTracker.getRules().get(0).getId();
         for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
-            if (!carTrackerRule.getId().equals(i)) {
-                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
-                        + carTrackerRule.getId() + " " + "isn't equal with count");
-                return false;
-            }
+//            if (!carTrackerRule.getId().equals(i)) {
+//                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
+//                        + carTrackerRule.getId() + " " + "isn't equal with count");
+//                return false;
+//            }
             if (Objects.isNull(carTrackerRule.getMetersDriven())) {
                 System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
                         + carTrackerRule.getId() + " " + "has null at KmDriven");
@@ -302,7 +307,7 @@ public class CarTrackerService {
                         + carTrackerRule.getId() + " " + "has 0 at lon");
                 return false;
             }
-            i++;
+//            i++;
         }
         return true;
     }
