@@ -2,7 +2,7 @@ package domain;
 
 import java.util.Date;
 
-public class recievedCarTrackerRule {
+public class ReceivedCarTrackerRule {
 
     private String id;
     private double lat;
@@ -10,10 +10,10 @@ public class recievedCarTrackerRule {
     private Date date;
     private  Long mdriven;
 
-    public recievedCarTrackerRule() {
+    public ReceivedCarTrackerRule() {
     }
 
-    public recievedCarTrackerRule(String id, double lat, double lon, Date date, Long mdriven) {
+    public ReceivedCarTrackerRule(String id, double lat, double lon, Date date, Long mdriven) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
