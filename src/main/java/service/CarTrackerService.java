@@ -1,7 +1,10 @@
 package service;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import dao.CarTrackerDao;
 import dao.CarTrackerRuleDao;
 import dao.JPA;
@@ -19,10 +22,7 @@ import javax.inject.Inject;
 import javax.json.JsonObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Stateless
 public class CarTrackerService {
@@ -38,6 +38,7 @@ public class CarTrackerService {
     @Inject
     @JPA
     public ProcessedCarsDao processedCarsDao;
+
 
     /**
      * Empty constructor
@@ -124,16 +125,19 @@ public class CarTrackerService {
      *
      * @param latLonPath
      * @return JSONArray containing places or an empty JSONArray when the path is null or empty.
-     * @throws UnirestException When something goes wrong when requesting the data.
+     * @throws UnirestException             When something goes wrong when requesting the data.
      * @throws UnsupportedEncodingException When something goes wrong during encoding the URL.
      */
     public JSONArray getPlacesForLatLonPath(String latLonPath) throws UnirestException, UnsupportedEncodingException {
         if (!StringHelper.isEmpty(latLonPath)) {
             String encodedURL = URLEncoder.encode(latLonPath, "UTF-8");
-            String url = "https://roads.googleapis.com/v1/snapToRoads?path=" + encodedURL + "&interpolate=true&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
 
-            JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
-            return jsonResponseObject.getJSONArray("snappedPoints");
+            String herokuUrl = "http://viezehack-js.herokuapp.com/hack/roads?path=" + encodedURL;
+            GetRequest getRequest = Unirest.get(herokuUrl);
+            HttpResponse<JsonNode> jsonNodeHttpResponse = getRequest.asJson();
+            JSONObject object = jsonNodeHttpResponse.getBody().getObject();
+
+            return object.getJSONArray("snappedPoints");
         }
 
         return new JSONArray();
@@ -147,29 +151,23 @@ public class CarTrackerService {
      * @param placesForLatLonPath Array containing all places.
      * @return List of all road names when there are no places available an empty list is returned
      * @throws UnsupportedEncodingException When something goes wrong during encoding the URL.
-     * @throws UnirestException When something goes wrong when requesting the data.
+     * @throws UnirestException             When something goes wrong when requesting the data.
      */
-    public List<String> getPlacesByLatAndLon(JSONArray placesForLatLonPath) throws UnsupportedEncodingException, UnirestException {
-        List<String> roadNames = new ArrayList<>();
+    public String getPlaceByLatAndLon(JSONArray placesForLatLonPath) throws UnsupportedEncodingException, UnirestException {
 
-        for (int i = 0; i < placesForLatLonPath.length(); i++) {
-            JSONObject placeJSONObject = placesForLatLonPath.getJSONObject(i);
-            String placeId = placeJSONObject.getString("placeId");
+        JSONObject placeJSONObject = placesForLatLonPath.getJSONObject(0);
+        String placeId = placeJSONObject.getString("placeId");
 
-            String encodedURL = URLEncoder.encode(placeId, "UTF-8");
-            String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + encodedURL + "&key=AIzaSyBECZDHHuxDsGezIfvZG2vEtAdLBz1B10I";
+        String encodedURL = URLEncoder.encode(placeId, "UTF-8");
+        String url = "http://viezehack-js.herokuapp.com/hack/places?id=" + encodedURL;
 
-            JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
-            String roadType = jsonResponseObject.getJSONArray("result").getJSONArray(0).getJSONArray(0).getString(1);
-
-            if(!roadType.equals("A") && !roadType.equals("N")) {
-                roadNames.add("O");
-            } else {
-                roadNames.add(roadType);
-            }
+        JSONObject jsonResponseObject = Unirest.get(url).asJson().getBody().getObject();
+        String roadType = jsonResponseObject.getJSONObject("result").getJSONArray("address_components").getJSONObject(0).getString("short_name").substring(0, 1);
+        if (!roadType.equals("A") && !roadType.equals("N")) {
+            return "O";
+        } else {
+            return roadType;
         }
-
-        return roadNames;
     }
 
     //</editor-fold>
@@ -219,18 +217,15 @@ public class CarTrackerService {
 
             if (safe) {
                 if (foundCarTracker != null) {
-                    foundCarTracker.addRules(carTracker.getRules());
-
-                    String latLonPath = getLatLonPath(carTracker.getRules());
+                    Long highestKnownCarTrackerRuleId = this.carTrackerRuleDao.getHighestRuleIdFromCarTrackerRules(carTracker);
+                    CarTrackerRule newestCarTrackerRule = this.carTrackerRuleDao.findById(highestKnownCarTrackerRuleId);
+                    List<CarTrackerRule> carTrackerRuleList = Collections.singletonList(newestCarTrackerRule);
+                    String latLonPath = getLatLonPath(carTrackerRuleList);
                     JSONArray placesForLatLonPath = getPlacesForLatLonPath(latLonPath);
-                    List<String> placesByLatAndLon = getPlacesByLatAndLon(placesForLatLonPath);
+                    String roadType = getPlaceByLatAndLon(placesForLatLonPath);
 
-                    for (int i = 0; i < carTracker.getRules().size(); i++) {
-                        String roadType = placesByLatAndLon.get(i);
-
-                        carTracker.getRules().get(i).setRoadType(roadType);
-                        carTracker.getRules().get(i).setCarTracker(foundCarTracker);
-                    }
+                    newestCarTrackerRule.setRoadType(roadType);
+                    newestCarTrackerRule.setCarTracker(foundCarTracker);
 
                     this.update(foundCarTracker);
 
@@ -253,12 +248,11 @@ public class CarTrackerService {
     public boolean executeAllCarTrackerChecks(CarTracker carTracker) {
         System.out.println("Running checks");
 
-        boolean idCheck = this.idCheck(carTracker);
         boolean sizeCheck = this.sizeCheck(carTracker);
         boolean missingRuleValuesCheck = this.missingRuleValuesCheck(carTracker);
         boolean storedDataCheck = this.storedDataCheck(carTracker.getId());
 
-        return idCheck && sizeCheck && missingRuleValuesCheck && storedDataCheck;
+        return sizeCheck && missingRuleValuesCheck && storedDataCheck;
 
     }
 
@@ -270,13 +264,7 @@ public class CarTrackerService {
      */
     public boolean missingRuleValuesCheck(CarTracker carTracker) {
 
-        Long i = carTracker.getRules().get(0).getId();
         for (CarTrackerRule carTrackerRule : carTracker.getRules()) {
-            if (!carTrackerRule.getId().equals(i)) {
-                System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
-                        + carTrackerRule.getId() + " " + "isn't equal with count");
-                return false;
-            }
             if (Objects.isNull(carTrackerRule.getMetersDriven())) {
                 System.out.println("CarTrackerID:" + " " + carTracker.getId() + " " + "RuleID:" + " "
                         + carTrackerRule.getId() + " " + "has null at KmDriven");
@@ -297,7 +285,6 @@ public class CarTrackerService {
                         + carTrackerRule.getId() + " " + "has 0 at lon");
                 return false;
             }
-            i++;
         }
         return true;
     }

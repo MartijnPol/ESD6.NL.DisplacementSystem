@@ -78,7 +78,7 @@ public class CarTrackerResource {
      */
     @POST
     @Path("/Update")
-    @Secured(AuthorizedApplications.AAS)
+//    @Secured(AuthorizedApplications.AAS)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCarTracker(CarTracker carTracker) {
@@ -92,7 +92,7 @@ public class CarTrackerResource {
 
         messageProducer.sendMessage(carTracker);
 
-        URI id = URI.create(carTracker.getId().toString());
+        URI id = URI.create(carTracker.getId());
         return Response.created(id).build();
     }
 
@@ -113,6 +113,7 @@ public class CarTrackerResource {
         CarTracker foundCarTracker = carTrackerService.findById(rule.getId());
         CarTrackerRule newRule = new CarTrackerRule(foundCarTracker, rule.getMdriven(), rule.getDate(), rule.getLat() , rule.getLon());
         foundCarTracker.addRule(newRule);
+        this.carTrackerService.update(foundCarTracker);
         messageProducer.sendMessage(foundCarTracker);
     }
 
