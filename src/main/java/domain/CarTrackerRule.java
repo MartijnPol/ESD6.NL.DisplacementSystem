@@ -18,7 +18,11 @@ import java.util.Objects;
         @NamedQuery(name = "carTrackerRule.getHighestRuleIdFromCarTrackerRules",
                 query = "SELECT MAX(c.id) FROM CarTrackerRule c WHERE c.carTracker = :carTracker"),
         @NamedQuery(name = "carTrackerRule.getRulesByIDMonthAndYear",
-                query = "SELECT c FROM CarTrackerRule c where c.carTracker.id = :carTrackerId and function('MONTH', c.date) = :month and function('YEAR', c.date) = :year")
+                query = "SELECT c FROM CarTrackerRule c where c.carTracker.id = :carTrackerId and function('MONTH', c.date) = :month and function('YEAR', c.date) = :year"),
+        @NamedQuery(name = "carTrackerRule.getCarTrackerRulesForDayAndRoadType",
+                query = "SELECT c FROM CarTrackerRule c WHERE c.carTracker.id = :carTrackerId AND c.roadType = :roadType AND c.date = :date"),
+        @NamedQuery(name = "carTrackerRule.getCarTrackerRulesForDay",
+                query = "SELECT c FROM CarTrackerRule c WHERE c.carTracker.id = :carTrackerId AND c.date = :date")
 })
 public class CarTrackerRule implements Serializable {
 

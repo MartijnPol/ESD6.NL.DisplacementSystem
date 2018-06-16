@@ -165,6 +165,8 @@ public class CarTrackerService {
         String roadType = jsonResponseObject.getJSONObject("result").getJSONArray("address_components").getJSONObject(0).getString("short_name").substring(0, 1);
         if (!roadType.equals("A") && !roadType.equals("N")) {
             return "O";
+        } else if(roadType.equals("E")) {
+            return "A";
         } else {
             return roadType;
         }

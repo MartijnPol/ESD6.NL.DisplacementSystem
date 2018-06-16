@@ -6,6 +6,7 @@ import domain.CarTracker;
 import domain.CarTrackerRule;
 
 import javax.ejb.Stateless;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,23 @@ public class CarTrackerRuleJPAImpl extends GenericDaoJPAImpl<CarTrackerRule> imp
                 .setParameter("carTrackerId", id)
                 .setParameter("month", month)
                 .setParameter("year", year)
+                .getResultList();
+    }
+
+    @Override
+    public List<CarTrackerRule> getCarTrackerRulesForDayAndRoadType(String carTrackerId, String roadType, Date date) {
+        return getEntityManager().createNamedQuery("carTrackerRule.getCarTrackerRulesForDayAndRoadType")
+                .setParameter("carTrackerId", carTrackerId)
+                .setParameter("roadType", roadType)
+                .setParameter("date", date)
+                .getResultList();
+    }
+
+    @Override
+    public List<CarTrackerRule> getCarTrackerRulesForDay(String carTrackerId, Date date) {
+        return getEntityManager().createNamedQuery("carTrackerRule.getCarTrackerRulesForDay")
+                .setParameter("carTrackerId", carTrackerId)
+                .setParameter("date", date)
                 .getResultList();
     }
 }
