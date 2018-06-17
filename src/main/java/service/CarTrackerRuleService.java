@@ -47,6 +47,13 @@ public class CarTrackerRuleService {
         return null;
     }
 
+    public List<CarTrackerRule> getAmountOfRulesByCarTrackerId(String carTrackerId, int amount) {
+        if (!StringUtils.isNullOrEmpty(carTrackerId)) {
+            return this.carTrackerRuleDao.getAmountOfRulesByCarTrackerId(carTrackerId, amount);
+        }
+        return null;
+    }
+
     /**
      * Replaces all the CarTrackerRules to JsonObjects.
      *

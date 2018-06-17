@@ -99,19 +99,19 @@ public class CarTrackerResource {
     /**
      * Function to add rules to a CarTracker entity.
      * When the parameter carTrackerRule or ID is evaluated null a response status not found is thrown (404).
-     * @param rule
      *
+     * @param rule
      */
     @POST
     @Path("/AddRule")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addCarTrackerRules(ReceivedCarTrackerRule rule ) {
+    public void addCarTrackerRules(ReceivedCarTrackerRule rule) {
         if (rule.getId().isEmpty() && rule.getLat() == 0.0 && rule.getLon() == 0.0 && rule.getDate() == null && rule.getMdriven() == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         CarTracker foundCarTracker = carTrackerService.findById(rule.getId());
-        CarTrackerRule newRule = new CarTrackerRule(foundCarTracker, rule.getMdriven(), rule.getDate(), rule.getLat() , rule.getLon());
+        CarTrackerRule newRule = new CarTrackerRule(foundCarTracker, rule.getMdriven(), rule.getDate(), rule.getLat(), rule.getLon());
         foundCarTracker.addRule(newRule);
         this.carTrackerService.update(foundCarTracker);
         messageProducer.sendMessage(foundCarTracker);
