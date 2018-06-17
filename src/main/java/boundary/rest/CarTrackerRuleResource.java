@@ -24,6 +24,20 @@ public class CarTrackerRuleResource {
     public CarTrackerRuleResource() {
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/amountOfRulesByCarTrackerId")
+    public Response getAmountOfCarTrackerRulesById(@QueryParam("id") String id, @QueryParam("amount") int amount) {
+        List<CarTrackerRule> foundRules = this.carTrackerRuleService.getAmountOfRulesByCarTrackerId(id, amount);
+
+        if (foundRules.isEmpty()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        return Response.ok(this.carTrackerRuleService.replaceAllToJson(foundRules)).build();
+    }
+
     @POST
     @Path("/carTrackerIdRoadTypeAndDate")
     @Consumes(MediaType.APPLICATION_JSON)
