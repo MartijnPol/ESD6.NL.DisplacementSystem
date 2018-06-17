@@ -21,4 +21,6 @@ public interface CarTrackerRuleDao extends GenericDao<CarTrackerRule> {
     List<CarTrackerRule> getCarTrackerRulesForDay(String carTrackerId, Date date);
 
     List<CarTrackerRule> getAmountOfRulesByCarTrackerId(String carTrackerId, int amount);
+
+    String getCarTrackerIdByRuleId(long id);
 }

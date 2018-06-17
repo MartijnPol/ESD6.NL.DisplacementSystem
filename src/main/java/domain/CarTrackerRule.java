@@ -24,7 +24,9 @@ import java.util.Objects;
         @NamedQuery(name = "carTrackerRule.getCarTrackerRulesForDay",
                 query = "SELECT c FROM CarTrackerRule c WHERE c.carTracker.id = :carTrackerId AND c.date = :date"),
         @NamedQuery(name = "carTrackerRule.getAmountOfRulesByCarTrackerId",
-                query = "SELECT c FROM CarTrackerRule c WHERE c.carTracker.id = :carTrackerId ORDER BY c.id DESC")
+                query = "SELECT c FROM CarTrackerRule c WHERE c.carTracker.id = :carTrackerId ORDER BY c.id DESC"),
+        @NamedQuery(name = "carTrackerRule.getCarTrackerIdByRuleId",
+                query = "SELECT c.carTracker.id FROM CarTrackerRule c WHERE c.id = :carTrackerRuleId")
 })
 public class CarTrackerRule implements Serializable {
 

@@ -1,5 +1,6 @@
 package boundary.rest;
 
+import com.mysql.jdbc.StringUtils;
 import domain.CarTrackerRule;
 import service.CarTrackerRuleService;
 
@@ -38,11 +39,11 @@ public class CarTrackerRuleResource {
         return Response.ok(this.carTrackerRuleService.replaceAllToJson(foundRules)).build();
     }
 
-    @POST
+    @GET
     @Path("/carTrackerIdRoadTypeAndDate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCarTrackerRulesForRoadTypeAndDate(String carTrackerId, String roadType, Date date) {
+    public Response getCarTrackerRulesForRoadTypeAndDate(@QueryParam("id") String carTrackerId, @QueryParam("roadType") String roadType, @QueryParam("date") Date date) {
         if (carTrackerId == null || roadType == null || date == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -70,5 +71,19 @@ public class CarTrackerRuleResource {
         }
 
         return Response.ok(this.carTrackerRuleService.replaceAllToJson(foundCarTrackerRules)).build();
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/CarTrackerIdByRuleId")
+    public Response getCarTrackerIdByRuleId(@QueryParam("id") long id) {
+        String carTrackerId = this.carTrackerRuleService.getCarTrackerIdByRuleId(id);
+
+        if (!StringUtils.isNullOrEmpty(carTrackerId)){
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        return Response.ok(carTrackerId).build();
     }
 }

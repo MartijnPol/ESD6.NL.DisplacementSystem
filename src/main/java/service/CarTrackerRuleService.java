@@ -54,6 +54,14 @@ public class CarTrackerRuleService {
         return null;
     }
 
+
+    public String getCarTrackerIdByRuleId(long carTrackerRuleId) {
+        if (carTrackerRuleId != 0L) {
+            return this.carTrackerRuleDao.getCarTrackerIdByRuleId(carTrackerRuleId);
+        }
+        return null;
+    }
+
     /**
      * Replaces all the CarTrackerRules to JsonObjects.
      *

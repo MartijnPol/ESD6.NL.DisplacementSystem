@@ -54,4 +54,11 @@ public class CarTrackerRuleJPAImpl extends GenericDaoJPAImpl<CarTrackerRule> imp
         return this.entityManager.createNamedQuery("carTrackerRule.getAmountOfRulesByCarTrackerId")
                 .setParameter("carTrackerId", carTrackerId).setMaxResults(amount).getResultList();
     }
+
+    @Override
+    public String getCarTrackerIdByRuleId(long id) {
+        return this.entityManager.createNamedQuery("carTrackerRule.getCarTrackerIdByRuleId", String.class)
+                .setParameter("carTrackerRuleId", id)
+                .getSingleResult();
+    }
 }
