@@ -42,7 +42,7 @@ public class CarTrackerRuleResource {
     @Path("/carTrackerIdRoadTypeAndDate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCarTrackerRulesForRoadTypeAndDate(String carTrackerId, String roadType, Date date) {
+    public Response getCarTrackerRulesForRoadTypeAndDate(@QueryParam("carTrackerId") String carTrackerId, @QueryParam("roadType") String roadType, @QueryParam("date") Date date) {
         if (carTrackerId == null || roadType == null || date == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -59,7 +59,7 @@ public class CarTrackerRuleResource {
     @Path("/carTrackerIdAndDate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCarTrackerRulesForDate(String carTrackerId, Date date) {
+    public Response getCarTrackerRulesForDate(@QueryParam("carTrackerId") String carTrackerId, @QueryParam("date") Date date) {
         if (carTrackerId == null || date == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
