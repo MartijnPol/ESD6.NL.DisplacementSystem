@@ -62,6 +62,7 @@ public class CarTrackerRuleService {
         return null;
     }
 
+
     /**
      * Replaces all the CarTrackerRules to JsonObjects.
      *
