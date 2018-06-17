@@ -65,7 +65,7 @@ public class CarTrackerResource {
         carTracker.getRules().forEach(carTrackerRule -> carTrackerRule.setCarTracker(carTracker));
         carTrackerService.create(carTracker);
 
-        URI id = URI.create(carTracker.getId().toString());
+        URI id = URI.create(carTracker.getId());
         return Response.created(id).build();
     }
 
